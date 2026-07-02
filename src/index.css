@@ -38,7 +38,7 @@
     /* 텍스트 컬러 */
     --color-text-primary: #2b2b2b;
     --color-text-secondary: #666666;
-    --color-text-tertiary: #8a8a8a;
+    --color-text-muted: #8a8a8a;
     --color-text-disabled: #a3a3a3;
 
     /* 구분선 */
@@ -82,7 +82,7 @@
 
     --color-text-primary: #f5f1eb;
     --color-text-secondary: #cfc6bc;
-    --color-text-tertiary: #a79d93;
+    --color-text-muted: #a79d93;
     --color-text-disabled: #8d857d;
 
     --color-border-primary: #4b433c;
