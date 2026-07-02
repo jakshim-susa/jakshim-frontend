@@ -4,7 +4,7 @@ import { Button } from "../components/common/Button";
 
 export const LandingPage = () => {
     return (
-        <section className="p-[40px]">
+        <main>
             <div className="flex items-center justify-center mb-5 max-w-[1200px] mx-auto mt-32">
                 <div>
                     <div className="font-logo text-7xl mb-5 --bor">
@@ -20,17 +20,23 @@ export const LandingPage = () => {
                         당신의 습관을 수사하여, <br />
                         반복되는 실패의 원인을 밝혀드립니다.
                     </p>
-                    <Link
+                    {/* <Link
                         to="/login"
                         className="block w-full text-sm px-4 py-2 bg-primary text-white text-center rounded-md hover:bg-primary-hover"
                     >
                         시작하기
+                    </Link> */}
+
+                    <Link to="/login" className="block w-full">
+                        <Button size="md" variant="primary" fullWidth>
+                            시작하기
+                        </Button>
                     </Link>
                 </div>
                 <div>
                     <img src={landingIcon} alt="로고 이미지" className="w-lg" />
                 </div>
             </div>
-        </section>
+        </main>
     );
 };
