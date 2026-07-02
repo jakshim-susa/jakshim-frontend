@@ -9,7 +9,7 @@ export const LoginPage = () => {
 
     return (
         <main className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center px-4">
-            <h1 className="text-3xl text-text text-center font-bold mb-6">
+            <h1 className="text-3xl text-text-primary text-center font-bold mb-8">
                 로그인
             </h1>
 
@@ -48,7 +48,7 @@ export const LoginPage = () => {
 
                 <p className="text-center mt-6 text-sm text-text-secondary">
                     계정이 없으신가요?
-                    <Link to="/register">
+                    <Link to="/signup">
                         <span className="pl-2 text-text-secondary font-semibold underline">
                             회원가입
                         </span>
