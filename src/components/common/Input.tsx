@@ -25,7 +25,7 @@ export const Input = ({
     return (
         <div className="flex flex-col gap-1.5">
             {label && (
-                <label className="text-sm font-medium text-text-primary">
+                <label className="text-sm font-medium text-text-secondary">
                     {label}
                 </label>
             )}

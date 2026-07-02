@@ -12,7 +12,7 @@ export const Header = () => {
     const isSignupPage = location.pathname === "/signup";
 
     return (
-        <header className="fixed top-0 left-0 z-50 w-full h-16 px-4 py-2 bg-secondary grid grid-cols-3 items-center">
+        <header className="fixed top-0 left-0 z-50 w-full h-16 px-4 bg-secondary grid grid-cols-3 items-center">
             {/* 왼쪽: 로고 */}
             <div className="justify-self-start">
                 <Logo />
@@ -78,7 +78,7 @@ export const Header = () => {
                             로그인
                         </Link>
                         <Link
-                            to="/login"
+                            to="/signup"
                             className="text-sm px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover"
                         >
                             회원가입
