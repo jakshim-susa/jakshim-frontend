@@ -50,6 +50,23 @@
     --font-sans: "Pretendard", "Noto Sans KR", sans-serif;
     --font-serif: "Nanum Myeongjo", serif;
     --font-logo: "Cafe24Ssurround", sans-serif; /* 로고 전용 */
+
+    /* 시맨틱 컬러 */
+    --color-success: #62b66a;
+    --color-success-hover: #62b66a;
+    --color-success-pressed: #478c4d;
+
+    --color-warning: #f4c542;
+    --color-warning-hover: #e4b634;
+    --color-warning-pressed: #d4a625;
+
+    --color-error: #e55a54;
+    --color-error-hover: #d94c46;
+    --color-error-pressed: #c63d38;
+
+    --color-info: #5a8dee;
+    --color-info-hover: #4b7fdf;
+    --color-info-pressed: #3c70cf;
 }
 
 @layer base {
