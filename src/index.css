@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: "Pretendard";
+    src: url("./assets/fonts/PretendardVariable.woff2")
+        format("woff2-variations");
+    font-weight: 45 920;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Cafe24Ssurround";
+    src: url("./assets/fonts/Cafe24Ssurround-v2.0.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@theme {
+    /* 브랜드 컬러 */
+    --color-primary: #8b6b4a;
+    --color-primary-hover: #755739;
+    --color-primary-pressed: #5f442a;
+    --color-primary-disabled: #c8b7a4;
+
+    /* 브랜드 보조 컬러 */
+    --color-secondary: #dccbb8;
+    --color-secondary-hover: #cdbaa5;
+    --color-secondary-pressed: #bca58d;
+    --color-secondary-disabled: #eae3db;
+
+    /* 배경 */
+    --color-bg-primary: #faf9f7;
+    --color-bg-secondary: #f5efe8;
+    --color-bg-white: #ffffff;
+
+    /* 텍스트 컬러 */
+    --color-text-primary: #2b2b2b;
+    --color-text-secondary: #666666;
+    --color-text-muted: #8a8a8a;
+    --color-text-disabled: #a3a3a3;
+
+    /* 구분선 */
+    --color-border-primary: #e5ded5;
+    --color-border-strong: #cdbaa5;
+    --color-border-divider: #efe9e2;
+
+    /* 폰트 */
+    --font-sans: "Pretendard", "Noto Sans KR", sans-serif;
+    --font-serif: "Nanum Myeongjo", serif;
+    --font-logo: "Cafe24Ssurround", sans-serif; /* 로고 전용 */
+}
+
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: var(--font-sans);
+    }
+}
+
+/* 다크모드일 때 색상 변수만 재정의 (폰트는 안 바뀌므로 제외) */
+.dark {
+    --color-primary: #c8a37a;
+    --color-primary-hover: #d5b089;
+    --color-primary-pressed: #b28a60;
+    --color-primary-disabled: #6d6256;
+
+    --color-secondary: #8e7660;
+    --color-secondary-hover: #a0846c;
+    --color-secondary-pressed: #745f4e;
+    --color-secondary-disabled: #4b433c;
+
+    --color-bg-primary: #1f1b18;
+    --color-bg-secondary: #2a2521;
+    --color-bg-white: #2a2521;
+
+    --color-text-primary: #f5f1eb;
+    --color-text-secondary: #cfc6bc;
+    --color-text-muted: #a79d93;
+    --color-text-disabled: #8d857d;
+
+    --color-border-primary: #4b433c;
+    --color-border-strong: #6b6158;
+    --color-border-divider: #5a5148;
+}
