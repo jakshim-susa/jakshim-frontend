@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
 import landingIcon from "../assets/images/langing-icon.png";
 import { Button } from "../components/common/Button";
+import { CenteredPageLayout } from "../components/layout/CenteredPageLayout";
 
 export const LandingPage = () => {
     return (
-        <main>
-            <div className="flex items-center justify-center mb-5 max-w-[1200px] mx-auto mt-32">
+        <CenteredPageLayout>
+            <div className="flex items-center justify-center mb-5 max-w-[1200px] mx-auto">
                 <div>
-                    <div className="font-logo text-7xl mb-5 --bor">
-                        작심삼일
-                    </div>
+                    <div className="font-logo text-7xl mb-5">작심삼일</div>
                     <div className="font-logo text-7xl">
                         수사대
                         <span className="inline-block scale-x-[-1] text-6xl">
@@ -31,6 +30,6 @@ export const LandingPage = () => {
                     <img src={landingIcon} alt="로고 이미지" className="w-lg" />
                 </div>
             </div>
-        </main>
+        </CenteredPageLayout>
     );
 };
