@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input } from "../components/common/Input";
 import { Button } from "../components/common/Button";
 import { Link } from "react-router-dom";
+import { CenteredPageLayout } from "../components/layout/CenteredPageLayout";
 
 export const SignupPage = () => {
     const [nickname, setNickname] = useState("");
@@ -9,7 +10,7 @@ export const SignupPage = () => {
     const [password, setPassword] = useState("");
 
     return (
-        <main className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center px-4">
+        <CenteredPageLayout>
             <div className="text-text-primary text-center mb-8">
                 <h1 className="text-3xl font-bold mb-1">시작해 볼까요?</h1>
             </div>
@@ -76,6 +77,6 @@ export const SignupPage = () => {
                     </Link>
                 </p>
             </div>
-        </main>
+        </CenteredPageLayout>
     );
 };

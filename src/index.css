@@ -106,3 +106,14 @@
     --color-border-strong: #6b6158;
     --color-border-divider: #5a5148;
 }
+
+main {
+    max-width: 1200px;
+    width: calc(100% - 4rem);
+    margin: auto;
+    padding: 50px 0 33px;
+}
+
+hr {
+    color: var(--color-border-primary);
+}

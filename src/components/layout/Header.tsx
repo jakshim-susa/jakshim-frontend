@@ -1,11 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { Logo } from "../common/Logo";
-import { useState } from "react";
 
 export const Header = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [user, setUser] = useState(true);
-    const [logout, setLogout] = useState(true);
+    const isLoggedIn = true;
 
     const location = useLocation();
     const isLoginPage = location.pathname === "/login";
@@ -24,7 +21,7 @@ export const Header = () => {
                     <>
                         {" "}
                         <Link
-                            to="/main"
+                            to="/home"
                             className="text-text-primary hover:text-primary"
                         >
                             홈
@@ -49,8 +46,8 @@ export const Header = () => {
             <div className="justify-self-end flex items-center gap-4">
                 {isLoggedIn ? (
                     <>
-                        <span>{user?.name}님</span>
-                        <button onClick={logout}>로그아웃</button>
+                        {/* <span>{user?.name}님</span>
+                        <button onClick={logout}>로그아웃</button> */}
                     </>
                 ) : isLoginPage ? (
                     // 로그인 페이지 → 회원가입 버튼만

@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "../components/common/Button";
 import { Input } from "../components/common/Input";
 import { Link } from "react-router-dom";
+import { CenteredPageLayout } from "../components/layout/CenteredPageLayout";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     return (
-        <main className="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center px-4">
+        <CenteredPageLayout>
             <h1 className="text-3xl text-text-primary text-center font-bold mb-8">
                 로그인
             </h1>
@@ -55,6 +56,6 @@ export const LoginPage = () => {
                     </Link>
                 </p>
             </div>
-        </main>
+        </CenteredPageLayout>
     );
 };
