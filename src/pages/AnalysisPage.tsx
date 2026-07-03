@@ -1,6 +1,6 @@
 import { AiBriefingCard } from "../components/briefing/AiBriefingCard";
 import { Greeting } from "../components/common/Greeting";
-import { StatCardProps } from "../components/analysis/StatCardProps";
+import { StatCard } from "../components/analysis/StatCardProps";
 import { Tag } from "../components/common/Tag";
 
 export const AnalysisPage = () => {
@@ -14,23 +14,23 @@ export const AnalysisPage = () => {
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <StatCardProps
+                <StatCard
                     icon="📊"
                     value="72%"
                     label="성공률"
                     trend={{ direction: "up", value: "지난달 +8%" }}
-                ></StatCardProps>
-                <StatCardProps
+                ></StatCard>
+                <StatCard
                     icon="🔥"
                     value="9일"
                     label="연속 성공 최고"
-                ></StatCardProps>
-                <StatCardProps
+                ></StatCard>
+                <StatCard
                     icon="📆"
                     value="4.7일"
                     label="평균 지속일"
                     trend={{ direction: "up", value: "+ 1.3일" }}
-                ></StatCardProps>
+                ></StatCard>
             </div>
 
             <hr />

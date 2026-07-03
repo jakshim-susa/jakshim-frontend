@@ -34,7 +34,7 @@ interface DailyRecordListProps {
     items: DailyRecordItemProps[];
 }
 
-export const DailyRecordList = ({ items }: DailyRecordListProps) => {
+export const ListView = ({ items }: DailyRecordListProps) => {
     return (
         <div className="divide-y divide-border-primary border-t border-b border-border-primary">
             {items.map((item, i) => (

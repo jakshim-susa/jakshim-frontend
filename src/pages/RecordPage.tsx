@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { AnalysisToggle } from "../components/analysis/AnalysisToggle";
 import { Greeting } from "../components/common/Greeting";
-import { DailyRecordList } from "../components/record/DailyRecordList";
+import { ListView } from "../components/record/ListView";
+import { CalendarView } from "../components/record/CalendarView";
 
 // 예시
 interface RawRecord {
@@ -42,6 +44,7 @@ const items = rawRecords.map((record) => ({
 }));
 
 export const RecordPage = () => {
+    const [view, setView] = useState<"calendar" | "list">("calendar");
     return (
         <main>
             <div className="flex flex-col gap-10">
@@ -52,7 +55,11 @@ export const RecordPage = () => {
                         rightLabel="리스트"
                     ></AnalysisToggle>
                 </div>
-                <DailyRecordList items={items} />
+                {view === "calendar" ? (
+                    <CalendarView />
+                ) : (
+                    <ListView items={items} />
+                )}
             </div>
         </main>
     );
