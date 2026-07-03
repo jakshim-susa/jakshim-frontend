@@ -9,7 +9,7 @@ export const AnalysisPage = () => {
             <Greeting name="홍길동" />
             <AiBriefingCard
                 title="수사 보고서"
-                content="수요일과 금요일 저녁 실패율이 높고, 유튜브·침대·야식 키워드가 반복됩니다. 저녁 루틴을 바꿔보는 게 핵심이에요."
+                content="수요일과 금요일 저녁 실패율이 높고, 유튜브·침대·야식 키워드가 반복됩니다. 저녁 루틴을 바꿔보는 게 핵심이에요."
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
