@@ -10,7 +10,7 @@ interface StatCardProps {
     };
 }
 
-export const StatCardProps = ({ icon, value, label, trend }: StatCardProps) => {
+export const StatCard = ({ icon, value, label, trend }: StatCardProps) => {
     return (
         <div className="w-full p-4 bg-white border-1 rounded-lg border-border-primary flex justify-between items-center">
             <div className="flex items-center gap-4">

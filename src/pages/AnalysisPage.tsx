@@ -1,35 +1,36 @@
 import { AiBriefingCard } from "../components/briefing/AiBriefingCard";
 import { Greeting } from "../components/common/Greeting";
-import { StatCardProps } from "../components/analysis/StatCardProps";
+import { StatCard } from "../components/analysis/StatCardProps";
 import { Tag } from "../components/common/Tag";
 
 export const AnalysisPage = () => {
+    const name = "홍길동";
     return (
         <main className="flex flex-col gap-8 flex-1">
-            <Greeting name="홍길동" />
+            <Greeting>안녕하세요, {name}님👋</Greeting>
             <AiBriefingCard
                 title="수사 보고서"
                 content="수요일과 금요일 저녁 실패율이 높고, 유튜브·침대·야식 키워드가 반복됩니다. 저녁 루틴을 바꿔보는 게 핵심이에요."
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <StatCardProps
+                <StatCard
                     icon="📊"
                     value="72%"
                     label="성공률"
                     trend={{ direction: "up", value: "지난달 +8%" }}
-                ></StatCardProps>
-                <StatCardProps
+                ></StatCard>
+                <StatCard
                     icon="🔥"
                     value="9일"
                     label="연속 성공 최고"
-                ></StatCardProps>
-                <StatCardProps
+                ></StatCard>
+                <StatCard
                     icon="📆"
                     value="4.7일"
                     label="평균 지속일"
                     trend={{ direction: "up", value: "+ 1.3일" }}
-                ></StatCardProps>
+                ></StatCard>
             </div>
 
             <hr />

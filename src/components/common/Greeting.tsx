@@ -1,12 +1,12 @@
 interface GreetingProps {
-    name: string;
+    children: React.ReactNode;
     className?: string;
 }
 
-export const Greeting = ({ name, className = "" }: GreetingProps) => {
+export const Greeting = ({ children, className = "" }: GreetingProps) => {
     return (
         <p className={`text-3xl font-bold text-text-primary ${className}`}>
-            안녕하세요, {name}님👋
+            {children}
         </p>
     );
 };
