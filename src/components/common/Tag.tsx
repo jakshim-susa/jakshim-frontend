@@ -1,22 +1,16 @@
 import React from "react";
 
-interface ButtonProps {
+interface TagProps {
     children: React.ReactNode;
-    onClick?: () => void;
     variant?: "primary" | "secondary" | "danger" | "outline" | "kakao";
-    size?: "sm" | "md" | "lg";
-    disabled?: boolean;
-    fullWidth?: boolean;
+    size?: "sm" | "md";
 }
 
-export const Button = ({
+export const Tag = ({
     children,
-    onClick,
     variant = "primary",
     size = "md",
-    disabled = false,
-    fullWidth = false,
-}: ButtonProps) => {
+}: TagProps) => {
     const variantStyle = {
         primary: "bg-primary text-white hover:bg-primary-hover",
         secondary: "bg-secondary text-text-primary hover:bg-secondary-hover",
@@ -28,17 +22,14 @@ export const Button = ({
 
     const sizeStyle = {
         sm: "text-xs px-3 py-1.5 rounded-sm",
-        md: "text-md px-4 py-2.5 rounded-lg",
-        lg: "text-lg px-6 py-4 rounded-2xl",
+        md: "text-sm px-4 py-2.5 rounded-3xl",
     };
 
     return (
-        <button
-            onClick={onClick}
-            disabled={disabled}
-            className={`cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${fullWidth ? "w-full" : ""} ${variantStyle[variant]} ${sizeStyle[size]}`}
+        <div
+            className={`cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${variantStyle[variant]} ${sizeStyle[size]}`}
         >
             {children}
-        </button>
+        </div>
     );
 };
