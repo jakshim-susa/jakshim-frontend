@@ -5,10 +5,11 @@ import { GoalList } from "../components/goal/GoalList";
 import { RecordList } from "../components/record/RecordList";
 
 export const HomePage = () => {
+    const name = "홍길동";
     return (
         <main className="flex flex-col gap-10 flex-1">
-            <div className="flex flex-col gap- 2">
-                <Greeting name="홍길동" />
+            <div className="flex flex-col gap-2">
+                <Greeting>안녕하세요, {name}님👋</Greeting>
                 <p className="text-md text-text-muted">
                     2026년 6월 28일 일요일
                 </p>
