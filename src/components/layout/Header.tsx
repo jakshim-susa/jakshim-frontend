@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Logo } from "../common/Logo";
 
 export const Header = () => {
-    const isLoggedIn = false;
+    const isLoggedIn = true;
 
     const location = useLocation();
     const isLoginPage = location.pathname === "/login";
@@ -21,7 +21,7 @@ export const Header = () => {
                     <>
                         {" "}
                         <Link
-                            to="/main"
+                            to="/home"
                             className="text-text-primary hover:text-primary"
                         >
                             홈

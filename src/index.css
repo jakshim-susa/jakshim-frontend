@@ -113,3 +113,7 @@ main {
     margin: auto;
     padding: 50px 0 33px;
 }
+
+hr {
+    color: var(--color-border-primary);
+}

@@ -2,13 +2,12 @@ import { Greeting } from "../components/common/Greeting";
 import { AiBriefingCard } from "../components/briefing/AiBriefingCard";
 import { Button } from "../components/common/Button";
 import { GoalList } from "../components/goal/GoalList";
-import { Check, Dumbbell, X } from "lucide-react";
-import { RecordList } from "../components/record/recordList";
+import { RecordList } from "../components/record/RecordList";
 
 export const HomePage = () => {
     return (
         <main className="flex flex-col gap-10 flex-1">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap- 2">
                 <Greeting name="홍길동" />
                 <p className="text-md text-text-muted">
                     2026년 6월 28일 일요일
