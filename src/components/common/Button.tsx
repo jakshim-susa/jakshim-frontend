@@ -27,16 +27,16 @@ export const Button = ({
     };
 
     const sizeStyle = {
-        sm: "text-xs px-3 py-1.5",
-        md: "text-md px-4 py-2.5",
-        lg: "text-lg px-6 py-4",
+        sm: "text-xs px-3 py-1.5 rounded-sm",
+        md: "text-md px-4 py-2.5 rounded-lg",
+        lg: "text-lg px-6 py-4 rounded-2xl",
     };
 
     return (
         <button
             onClick={onClick}
             disabled={disabled}
-            className={`cursor-pointer rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${fullWidth ? "w-full" : ""} ${variantStyle[variant]} ${sizeStyle[size]}`}
+            className={`cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${fullWidth ? "w-full" : ""} ${variantStyle[variant]} ${sizeStyle[size]}`}
         >
             {children}
         </button>
