@@ -5,7 +5,9 @@ interface GreetingProps {
 
 export const Greeting = ({ children, className = "" }: GreetingProps) => {
     return (
-        <p className={`text-3xl font-bold text-text-primary ${className}`}>
+        <p
+            className={`text-xl md:text-3xl font-bold text-text-primary ${className}`}
+        >
             {children}
         </p>
     );

@@ -35,7 +35,7 @@ export const AnalysisPage = () => {
 
             <hr />
 
-            <div className="grid grid-cols-2 text-text-primary">
+            <div className="grid grid-cols-1 md:grid-cols-2 text-text-primary">
                 <div className="flex flex-col gap-2">
                     <p>가장 많이 실패하는 요인</p>
                     <div>차트</div>
@@ -52,7 +52,12 @@ export const AnalysisPage = () => {
             <hr />
             <div className="flex flex-col gap-2">
                 <p>자주 등장하는 키워드</p>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
+                    <Tag size="md"># 유튜브</Tag>
+                    <Tag size="md"># 유튜브</Tag>
+                    <Tag size="md"># 유튜브</Tag>
+                    <Tag size="md"># 유튜브</Tag>
+                    <Tag size="md"># 유튜브</Tag>
                     <Tag size="md"># 유튜브</Tag>
                     <Tag size="md"># 유튜브</Tag>
                 </div>

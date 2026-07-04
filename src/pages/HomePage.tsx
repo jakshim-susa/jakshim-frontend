@@ -3,14 +3,16 @@ import { AiBriefingCard } from "../components/briefing/AiBriefingCard";
 import { Button } from "../components/common/Button";
 import { GoalList } from "../components/goal/GoalList";
 import { RecordList } from "../components/record/RecordList";
+import { useNavigate } from "react-router-dom";
 
 export const HomePage = () => {
     const name = "홍길동";
+    const navigate = useNavigate();
     return (
         <main className="flex flex-col gap-10 flex-1">
             <div className="flex flex-col gap-2">
                 <Greeting>안녕하세요, {name}님👋</Greeting>
-                <p className="text-md text-text-muted">
+                <p className="text-sm md:text-lg text-text-muted">
                     2026년 6월 28일 일요일
                 </p>
                 <div className="text-xs text-white text-center rounded-2xl bg-success w-[130px]">
@@ -22,7 +24,7 @@ export const HomePage = () => {
                 content="밤 10시 이후  취침이 운동 실패와 가장 높은 관련성을 보입니다. 오늘은 저녁 10시 전에 완료해 보세요."
             />
 
-            <div className="grid grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="text-text-primary">
                     <div className="flex justify-between items-center mb-10">
                         <p className="font-semibold text-primary-pressed">
@@ -41,7 +43,12 @@ export const HomePage = () => {
                         <p className="font-semibold text-primary-pressed">
                             최근 기록
                         </p>
-                        <p className="cursor-pointer text-primary-pressed active:underline a">
+                        <p
+                            className="cursor-pointer text-primary-pressed active:underline a"
+                            onClick={() =>
+                                navigate("/record", { state: { view: "list" } })
+                            }
+                        >
                             전체 보기
                         </p>
                     </div>
