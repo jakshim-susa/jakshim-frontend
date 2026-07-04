@@ -6,7 +6,7 @@ interface recordListProps {
 export const RecordList = ({ reason, category }: recordListProps) => {
     return (
         <>
-            <div className="flex justify-between mb-4 items-center">
+            <div className="flex flex-wrap justify-between mb-4 items-center">
                 <div className="flex items-center gap-8">
                     <p className="font-bold text-text-primary">06.08(월)</p>
                     <div className="text-text-primary">{reason}</div>
