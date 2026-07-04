@@ -10,3 +10,9 @@ export interface Goal {
 export interface GoalListResponse {
     goals: Goal[];
 }
+
+export interface GoalCreateRequest {
+    title: string;
+    startDate?: string;
+    endDate?: string;
+}

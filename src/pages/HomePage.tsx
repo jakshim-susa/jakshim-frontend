@@ -8,11 +8,13 @@ import { useAuthStore } from "../store/authStore";
 import { useEffect, useState } from "react";
 import { getGoals } from "../api/goal";
 import type { Goal } from "../types/goal";
+import { GoalCreateModal } from "../components/goal/GoalCreateModal";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
     const [goals, setGoals] = useState<Goal[]>([]);
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchGoals = async () => {
@@ -25,6 +27,15 @@ export const HomePage = () => {
         };
         fetchGoals();
     }, []);
+
+    const handleGoalSuccess = async () => {
+        try {
+            const res = await getGoals();
+            setGoals(res.goals);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <main className="flex flex-col gap-10 flex-1">
@@ -48,9 +59,20 @@ export const HomePage = () => {
                         <p className="font-semibold text-primary-pressed">
                             오늘의 목표
                         </p>
-                        <Button variant="outline" size="sm">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setIsModalOpen(true)}
+                        >
                             + 목표 생성
                         </Button>
+
+                        {isModalOpen && (
+                            <GoalCreateModal
+                                onClose={() => setIsModalOpen(false)}
+                                onSuccess={handleGoalSuccess}
+                            />
+                        )}
                     </div>
                     {goals.length === 0 ? (
                         <p className="text-text-muted text-sm">
