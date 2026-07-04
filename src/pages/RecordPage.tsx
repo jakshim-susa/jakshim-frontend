@@ -3,6 +3,7 @@ import { AnalysisToggle } from "../components/analysis/AnalysisToggle";
 import { Greeting } from "../components/common/Greeting";
 import { ListView } from "../components/record/ListView";
 import { CalendarView } from "../components/record/CalendarView";
+import { useLocation } from "react-router-dom";
 
 // 예시
 interface RawRecord {
@@ -44,7 +45,10 @@ const items = rawRecords.map((record) => ({
 }));
 
 export const RecordPage = () => {
-    const [view, setView] = useState<"calendar" | "list">("calendar");
+    const location = useLocation();
+    const [view, setView] = useState<"calendar" | "list">(
+        location.state?.view || "calendar",
+    );
     return (
         <main>
             <div className="flex flex-col gap-10">

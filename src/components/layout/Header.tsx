@@ -16,7 +16,7 @@ export const Header = () => {
             </div>
 
             {/* 가운데 네비게이션 */}
-            <nav className="justify-self-center flex items-center gap-8">
+            <nav className="justify-self-center flex items-center gap-8 hidden md:flex">
                 {isLoggedIn && (
                     <>
                         {" "}
