@@ -2,12 +2,13 @@ import { AiBriefingCard } from "../components/briefing/AiBriefingCard";
 import { Greeting } from "../components/common/Greeting";
 import { StatCard } from "../components/analysis/StatCardProps";
 import { Tag } from "../components/common/Tag";
+import { useAuthStore } from "../store/authStore";
 
 export const AnalysisPage = () => {
-    const name = "홍길동";
+    const { nickname } = useAuthStore();
     return (
         <main className="flex flex-col gap-8 flex-1">
-            <Greeting>안녕하세요, {name}님👋</Greeting>
+            <Greeting>안녕하세요, {nickname}님👋</Greeting>
             <AiBriefingCard
                 title="수사 보고서"
                 content="수요일과 금요일 저녁 실패율이 높고, 유튜브·침대·야식 키워드가 반복됩니다. 저녁 루틴을 바꿔보는 게 핵심이에요."

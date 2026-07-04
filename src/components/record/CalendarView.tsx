@@ -12,7 +12,7 @@ export const CalendarView = () => {
                 value={value}
                 onChange={(date) => setValue(date as Date)}
                 locale="ko-KR"
-                formatDay={(locale, date) => date.getDate().toString()}
+                formatDay={(_locale, date) => date.getDate().toString()}
             />
             <CalendarLegendItem />
             <hr />

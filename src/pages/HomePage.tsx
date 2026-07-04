@@ -4,14 +4,15 @@ import { Button } from "../components/common/Button";
 import { GoalList } from "../components/goal/GoalList";
 import { RecordList } from "../components/record/RecordList";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../store/authStore";
 
 export const HomePage = () => {
-    const name = "홍길동";
+    const { nickname } = useAuthStore();
     const navigate = useNavigate();
     return (
         <main className="flex flex-col gap-10 flex-1">
             <div className="flex flex-col gap-2">
-                <Greeting>안녕하세요, {name}님👋</Greeting>
+                <Greeting>안녕하세요, {nickname}님👋</Greeting>
                 <p className="text-sm md:text-lg text-text-muted">
                     2026년 6월 28일 일요일
                 </p>
