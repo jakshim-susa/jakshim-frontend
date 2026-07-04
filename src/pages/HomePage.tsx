@@ -5,10 +5,27 @@ import { GoalList } from "../components/goal/GoalList";
 import { RecordList } from "../components/record/RecordList";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import { useEffect, useState } from "react";
+import { getGoals } from "../api/goal";
+import type { Goal } from "../types/goal";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
+    const [goals, setGoals] = useState<Goal[]>([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchGoals = async () => {
+            try {
+                const res = await getGoals();
+                setGoals(res.goals);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchGoals();
+    }, []);
+
     return (
         <main className="flex flex-col gap-10 flex-1">
             <div className="flex flex-col gap-2">
@@ -35,9 +52,15 @@ export const HomePage = () => {
                             + 목표 생성
                         </Button>
                     </div>
-                    <GoalList>운동하기</GoalList>
-                    <GoalList>운동하기</GoalList>
-                    <GoalList>운동하기</GoalList>
+                    {goals.length === 0 ? (
+                        <p className="text-text-muted text-sm">
+                            아직 목표가 없어요. 목표를 추가해보세요!
+                        </p>
+                    ) : (
+                        goals.map((goal) => (
+                            <GoalList key={goal.goalId}>{goal.title}</GoalList>
+                        ))
+                    )}
                 </div>
                 <div className="text-text-primary">
                     <div className="flex justify-between items-center mb-10">
