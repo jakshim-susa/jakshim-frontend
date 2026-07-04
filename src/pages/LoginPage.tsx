@@ -3,6 +3,7 @@ import { Button } from "../components/common/Button";
 import { Input } from "../components/common/Input";
 import { Link } from "react-router-dom";
 import { CenteredPageLayout } from "../components/layout/CenteredPageLayout";
+import { kakaoLogin } from "../utils/kakao";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -43,7 +44,7 @@ export const LoginPage = () => {
                     <div className="flex-1 h-px bg-border-primary" />
                 </div>
 
-                <Button size="md" variant="kakao">
+                <Button size="md" variant="kakao" onClick={kakaoLogin}>
                     카카오로 로그인
                 </Button>
 

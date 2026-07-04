@@ -6,6 +6,7 @@ import { SignupPage } from "./pages/SignupPage";
 import { HomePage } from "./pages/HomePage";
 import { AnalysisPage } from "./pages/AnalysisPage";
 import { RecordPage } from "./pages/RecordPage";
+import { KakaoCallbackPage } from "./pages/KakaoCallbackPage";
 
 const router = createBrowserRouter([
     {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
             { path: "/home", element: <HomePage /> },
             { path: "/analysis", element: <AnalysisPage /> },
             { path: "/record", element: <RecordPage /> },
+            { path: "/auth/kakao/callback", element: <KakaoCallbackPage /> },
         ],
     },
 ]);
