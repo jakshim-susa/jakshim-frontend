@@ -15,3 +15,15 @@ export interface RecordListDay {
 export interface RecordAllListResponse {
     records: RecordListDay[];
 }
+
+export interface Task {
+    goalTitle: string;
+    status: string | null;
+    reasonCategory: string | null;
+}
+
+export interface DailyRecordItemProps {
+    date: string;
+    dayLabel: string;
+    tasks: Task[];
+}

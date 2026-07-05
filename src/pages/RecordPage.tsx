@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnalysisToggle } from "../components/analysis/AnalysisToggle";
 import { Greeting } from "../components/common/Greeting";
 import { ListView } from "../components/record/ListView";
 import { CalendarView } from "../components/record/CalendarView";
 import { useLocation } from "react-router-dom";
+import type { RecordListDay } from "../types/record";
+import { getAllRecords } from "../api/record";
 
 // 예시
 interface RawRecord {
@@ -46,9 +48,29 @@ const items = rawRecords.map((record) => ({
 
 export const RecordPage = () => {
     const location = useLocation();
+    const [records, setRecords] = useState<RecordListDay[]>([]);
     const [view, setView] = useState<"calendar" | "list">(
         location.state?.view || "calendar",
     );
+
+    useEffect(() => {
+        const fetchRecords = async () => {
+            const res = await getAllRecords();
+            setRecords(res.records);
+        };
+        fetchRecords();
+    }, []);
+
+    const items = records.map((day) => ({
+        date: formatDate(day.date),
+        dayLabel: getDayLabel(day.date),
+        tasks: day.goals.map((goal) => ({
+            goalTitle: goal.goal,
+            status: goal.status,
+            reasonCategory: goal.reasonCategory,
+        })),
+    }));
+
     return (
         <main>
             <div className="flex flex-col gap-10">

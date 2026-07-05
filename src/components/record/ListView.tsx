@@ -1,8 +1,4 @@
-interface DailyRecordItemProps {
-    date: string;
-    dayLabel: string;
-    tasks: string[];
-}
+import type { DailyRecordItemProps } from "../../types/record";
 
 const DailyRecordItem = ({ date, dayLabel, tasks }: DailyRecordItemProps) => {
     return (
@@ -18,9 +14,27 @@ const DailyRecordItem = ({ date, dayLabel, tasks }: DailyRecordItemProps) => {
             <div>
                 <ul>
                     {tasks.map((task, i) => (
-                        <li key={i}>
-                            <span className="inline-block bg-success w-3 h-3 rounded-full mr-2.5" />
-                            {task}
+                        <li key={i} className="flex items-center gap-2 mb-1">
+                            <span
+                                className={`inline-block w-3 h-3 rounded-full ${
+                                    task.status === "success"
+                                        ? "bg-success"
+                                        : task.status === "fail"
+                                          ? "bg-error"
+                                          : "bg-gray-300"
+                                }`}
+                            />
+                            <span>{task.goalTitle}</span>
+                            {task.status === null && (
+                                <span className="text-xs text-text-muted">
+                                    미기록
+                                </span>
+                            )}
+                            {task.status === "fail" && task.reasonCategory && (
+                                <span className="text-xs text-text-muted">
+                                    ({task.reasonCategory})
+                                </span>
+                            )}
                         </li>
                     ))}
                 </ul>
@@ -37,9 +51,11 @@ interface DailyRecordListProps {
 export const ListView = ({ items }: DailyRecordListProps) => {
     return (
         <div className="divide-y divide-border-primary border-t border-b border-border-primary">
-            {items.map((item, i) => (
-                <DailyRecordItem key={i} {...item} />
-            ))}
+            {items.length === 0 ? (
+                <p className="text-text-muted text-sm py-4">기록이 없어요.</p>
+            ) : (
+                items.map((item, i) => <DailyRecordItem key={i} {...item} />)
+            )}
         </div>
     );
 };

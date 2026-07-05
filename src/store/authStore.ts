@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface AuthStore {
     accessToken: string | null;
@@ -8,11 +9,19 @@ interface AuthStore {
     clearAuth: () => void;
 }
 
-export const useAuthStore = create<AuthStore>((set) => ({
-    accessToken: null,
-    nickname: null,
-    theme: null,
-    setAuth: (accessToken, nickname, theme) =>
-        set({ accessToken, nickname, theme }),
-    clearAuth: () => set({ accessToken: null, nickname: null, theme: null }),
-}));
+export const useAuthStore = create<AuthStore>()(
+    persist(
+        (set) => ({
+            accessToken: null,
+            nickname: null,
+            theme: null,
+            setAuth: (accessToken, nickname, theme) =>
+                set({ accessToken, nickname, theme }),
+            clearAuth: () =>
+                set({ accessToken: null, nickname: null, theme: null }),
+        }),
+        {
+            name: "auth-storage", // localStorage 키 이름
+        },
+    ),
+);
