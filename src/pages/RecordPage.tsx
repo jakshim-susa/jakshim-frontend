@@ -7,29 +7,6 @@ import { useLocation } from "react-router-dom";
 import type { RecordListDay } from "../types/record";
 import { getAllRecords } from "../api/record";
 
-// 예시
-interface RawRecord {
-    id: string;
-    createdAt: string; // "2026-06-20"
-    todos: { id: string; title: string }[];
-}
-
-const rawRecords: RawRecord[] = [
-    {
-        id: "1",
-        createdAt: "2026-06-20",
-        todos: [
-            { id: "a", title: "매일 운동하기" },
-            { id: "b", title: "매일 운동하기" },
-        ],
-    },
-    {
-        id: "2",
-        createdAt: "2026-06-19",
-        todos: [{ id: "c", title: "매일 운동하기" }],
-    },
-];
-
 const formatDate = (iso: string) => {
     const d = new Date(iso);
     return `${d.getMonth() + 1}.${d.getDate()}`;
@@ -39,12 +16,6 @@ const getDayLabel = (iso: string) => {
     const days = ["일", "월", "화", "수", "목", "금", "토"];
     return days[new Date(iso).getDay()];
 };
-
-const items = rawRecords.map((record) => ({
-    date: formatDate(record.createdAt),
-    dayLabel: getDayLabel(record.createdAt),
-    tasks: record.todos.map((t) => t.title),
-}));
 
 export const RecordPage = () => {
     const location = useLocation();
@@ -79,7 +50,11 @@ export const RecordPage = () => {
                     <AnalysisToggle
                         leftLabel="달력"
                         rightLabel="리스트"
-                    ></AnalysisToggle>
+                        selected={view === "calendar" ? "left" : "right"}
+                        onChange={(value) =>
+                            setView(value === "left" ? "calendar" : "list")
+                        }
+                    />
                 </div>
                 {view === "calendar" ? (
                     <CalendarView />
