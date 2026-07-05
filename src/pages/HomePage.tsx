@@ -9,12 +9,15 @@ import { useEffect, useState } from "react";
 import { getGoals } from "../api/goal";
 import type { Goal } from "../types/goal";
 import { GoalCreateModal } from "../components/goal/GoalCreateModal";
+import type { RecordListDay } from "../types/record";
+import { getAllRecords } from "../api/record";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
     const [goals, setGoals] = useState<Goal[]>([]);
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [recentRecords, setRecentRecords] = useState<RecordListDay[]>([]);
 
     useEffect(() => {
         const fetchGoals = async () => {
@@ -26,6 +29,18 @@ export const HomePage = () => {
             }
         };
         fetchGoals();
+    }, []);
+
+    useEffect(() => {
+        const fetchRecords = async () => {
+            try {
+                const res = await getAllRecords();
+                setRecentRecords(res.records.slice(0, 4)); // 최근 4개만
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchRecords();
     }, []);
 
     const handleGoalSuccess = async () => {
@@ -98,10 +113,25 @@ export const HomePage = () => {
                             전체 보기
                         </p>
                     </div>
-                    <RecordList reason="피곤했다.." category="😓피로" />
-                    <RecordList reason="피곤했다.." category="😓피로" />
-                    <RecordList reason="피곤했다.." category="😓피로" />
-                    <RecordList reason="피곤했다.." category="😓피로" />
+                    {recentRecords.length === 0 ? (
+                        <p className="text-text-muted text-sm">
+                            최근 기록이 없어요.
+                        </p>
+                    ) : (
+                        recentRecords.map((day) =>
+                            day.goals
+                                .filter((goal) => goal.status !== null)
+                                .map((goal) => (
+                                    <RecordList
+                                        key={goal.goalId}
+                                        date={day.date}
+                                        goalTitle={goal.goal}
+                                        status={goal.status}
+                                        reasonCategory={goal.reasonCategory}
+                                    />
+                                )),
+                        )
+                    )}
                 </div>
             </div>
         </main>

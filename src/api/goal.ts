@@ -7,6 +7,6 @@ export const getGoals = async () => {
 };
 
 export const createGoal = async (data: GoalCreateRequest) => {
-    const res = await api.post("/api/goals", data);
+    const res = await api.post("/api/goals/", data);
     return res.data;
 };
