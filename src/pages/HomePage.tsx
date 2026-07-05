@@ -9,8 +9,9 @@ import { useEffect, useState } from "react";
 import { getGoals } from "../api/goal";
 import type { Goal } from "../types/goal";
 import { GoalCreateModal } from "../components/goal/GoalCreateModal";
-import type { RecordListDay } from "../types/record";
+import type { RecordListDay, RecordListGoal } from "../types/record";
 import { getAllRecords } from "../api/record";
+import { getKoreaToday } from "../utils/date";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
@@ -18,6 +19,20 @@ export const HomePage = () => {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [recentRecords, setRecentRecords] = useState<RecordListDay[]>([]);
+    const [todayRecords, setTodayRecords] = useState<RecordListGoal[]>([]);
+
+    const fetchTodayRecords = async () => {
+        try {
+            const today = getKoreaToday(); // ← KST로 변경
+            const res = await getAllRecords();
+            const todayData = res.records.find(
+                (day: RecordListDay) => day.date === today,
+            );
+            setTodayRecords(todayData?.goals || []);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         const fetchGoals = async () => {
@@ -43,10 +58,21 @@ export const HomePage = () => {
         fetchRecords();
     }, []);
 
+    useEffect(() => {
+        const initTodayRecords = async () => {
+            await fetchTodayRecords();
+        };
+        initTodayRecords();
+    }, []);
+
     const handleGoalSuccess = async () => {
         try {
             const res = await getGoals();
             setGoals(res.goals);
+            await fetchTodayRecords();
+
+            const recordRes = await getAllRecords();
+            setRecentRecords(recordRes.records.slice(0, 4));
         } catch (error) {
             console.error(error);
         }
@@ -95,7 +121,18 @@ export const HomePage = () => {
                         </p>
                     ) : (
                         goals.map((goal) => (
-                            <GoalList key={goal.goalId}>{goal.title}</GoalList>
+                            <GoalList
+                                key={goal.goalId}
+                                goalId={goal.goalId}
+                                status={
+                                    todayRecords.find(
+                                        (r) => r.goalId === goal.goalId,
+                                    )?.status || null
+                                }
+                                onSuccess={handleGoalSuccess}
+                            >
+                                {goal.title}
+                            </GoalList>
                         ))
                     )}
                 </div>
