@@ -122,8 +122,37 @@
 .react-calendar__tile--now abbr,
 .react-calendar__tile--active abbr,
 .react-calendar__tile:hover abbr {
-    width: 36px; /* ← 모바일 작게 */
+    width: 36px;
     height: 36px;
+}
+
+/* 성공/실패/부분 동그라미 - 모바일 */
+.react-calendar__tile.tile-success abbr,
+.react-calendar__tile.tile-fail abbr,
+.react-calendar__tile.tile-partial abbr {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+}
+
+.react-calendar__tile.tile-success abbr {
+    background-color: var(--color-success);
+}
+
+.react-calendar__tile.tile-fail abbr {
+    background-color: var(--color-error);
+}
+
+.react-calendar__tile.tile-partial abbr {
+    background: linear-gradient(
+        90deg,
+        var(--color-success) 50%,
+        var(--color-error) 50%
+    );
 }
 
 /* 데스크탑 */
@@ -136,8 +165,11 @@
 
     .react-calendar__tile--now abbr,
     .react-calendar__tile--active abbr,
-    .react-calendar__tile:hover abbr {
-        width: 50px; /* ← 데스크탑 크게 */
+    .react-calendar__tile:hover abbr,
+    .react-calendar__tile.tile-success abbr,
+    .react-calendar__tile.tile-fail abbr,
+    .react-calendar__tile.tile-partial abbr {
+        width: 50px;
         height: 50px;
     }
 }
