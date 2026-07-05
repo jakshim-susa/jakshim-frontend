@@ -11,7 +11,7 @@ import type { Goal } from "../types/goal";
 import { GoalCreateModal } from "../components/goal/GoalCreateModal";
 import type { RecordListDay, RecordListGoal } from "../types/record";
 import { getAllRecords } from "../api/record";
-import { getKoreaToday } from "../utils/date";
+import { getFormattedDate, getKoreaToday } from "../utils/date";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
@@ -83,7 +83,7 @@ export const HomePage = () => {
             <div className="flex flex-col gap-2">
                 <Greeting>안녕하세요, {nickname}님👋</Greeting>
                 <p className="text-sm md:text-lg text-text-muted">
-                    2026년 6월 28일 일요일
+                    {getFormattedDate()}
                 </p>
                 <div className="text-xs text-white text-center rounded-2xl bg-success w-[130px]">
                     🔥12일 연속 성공 중!
