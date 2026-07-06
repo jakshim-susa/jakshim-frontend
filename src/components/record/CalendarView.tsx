@@ -3,12 +3,33 @@ import Calendar from "react-calendar";
 import "../../styles/calendar.css";
 import { CalendarLegendItem } from "./CalendarLegendItem";
 import { StatCard } from "./StatCard";
-import { getAllRecords } from "../../api/record";
-import type { RecordListDay } from "../../types/record";
+import { getAllRecords, getRecordsByDate } from "../../api/record";
+import type { RecordListDay, RecordListGoal } from "../../types/record";
 
 export const CalendarView = () => {
     const [value, setValue] = useState(new Date());
     const [records, setRecords] = useState<RecordListDay[]>([]);
+    const [selectedDate, setSelectedDate] = useState<string | null>(null);
+    const [selectedRecords, setSelectedRecords] = useState<RecordListGoal[]>(
+        [],
+    );
+    const [selectedDiary, setSelectedDiary] = useState<string | null>(null);
+
+    const handleDateClick = async (date: Date) => {
+        setValue(date);
+        const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+        const dateStr = kstDate.toISOString().split("T")[0];
+        setSelectedDate(dateStr);
+
+        try {
+            const res = await getRecordsByDate(dateStr);
+            console.log("res:", res);
+            setSelectedRecords(res.records);
+            setSelectedDiary(res.diary?.content || null);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         const fetchRecords = async () => {
@@ -94,22 +115,74 @@ export const CalendarView = () => {
 
     return (
         <div className="flex flex-col gap-10">
-            <Calendar
-                value={value}
-                onChange={(date) => setValue(date as Date)}
-                locale="ko-KR"
-                formatDay={(_locale, date) => date.getDate().toString()}
-                tileClassName={tileClassName}
-            />
-            <CalendarLegendItem />
+            <div
+                className={`flex flex-col gap-8 ${selectedDate ? "md:flex-row" : ""}`}
+            >
+                {/* 왼쪽 - 달력 */}
+                <div className={selectedDate ? "md:w-1/2" : "w-full"}>
+                    <Calendar
+                        value={value}
+                        onChange={(date) => handleDateClick(date as Date)}
+                        locale="ko-KR"
+                        formatDay={(_locale, date) => date.getDate().toString()}
+                        tileClassName={tileClassName}
+                    />
+                    {/* 범례 - 모바일에서는 달력 바로 아래 */}
+                    <div className="mt-4 md:hidden">
+                        <CalendarLegendItem />
+                    </div>
+                </div>
+
+                {/* 오른쪽 - 상세 정보 */}
+
+                <div className="md:w-1/2">
+                    <div className="flex flex-col gap-4">
+                        <p className="font-bold text-text-primary">
+                            {selectedDate}
+                        </p>
+                        {selectedRecords.map((record) => (
+                            <div
+                                key={record.goalId}
+                                className="flex justify-between items-center"
+                            >
+                                <span className="text-text-primary">
+                                    {record.goal}
+                                </span>
+                                <span
+                                    className={`text-xs text-white rounded-2xl px-4 py-1 ${record.status === "success" ? "bg-success" : record.status === "fail" ? "bg-error" : "bg-gray-300"}`}
+                                >
+                                    {record.status === "success"
+                                        ? "성공"
+                                        : record.status === "fail"
+                                          ? "실패"
+                                          : "미기록"}
+                                </span>
+                            </div>
+                        ))}
+                        {selectedDiary && (
+                            <div className="mt-4">
+                                <p className="text-sm text-text-muted">일기</p>
+                                <p className="text-text-primary">
+                                    {selectedDiary}
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* 범례 - 데스크탑에서는 기존 위치 */}
+            <div className="hidden md:block">
+                <CalendarLegendItem />
+            </div>
             <hr />
             <div className="flex flex-col gap-6">
                 <p className="text-text-primary text-md font-medium">
                     이번 달 요약
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 text-center gap-4">
-                    <StatCard value={`${thisMonthSuccess}일`} label="성공" />
-                    <StatCard value={`${thisMonthFail}일`} label="실패" />
+                    <StatCard value={`${thisMonthSuccess}회`} label="성공" />
+                    <StatCard value={`${thisMonthFail}회`} label="실패" />
                     <StatCard value={`${successRate}%`} label="성공률" />
                 </div>
             </div>
