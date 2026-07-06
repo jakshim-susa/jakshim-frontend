@@ -13,6 +13,7 @@ import type { RecordListDay, RecordListGoal } from "../types/record";
 import { getAllRecords } from "../api/record";
 import { getFormattedDate, getKoreaToday } from "../utils/date";
 import { getBriefing } from "../api/analysis";
+import { LoadingSpinner } from "../components/common/LoadingSpinner";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
@@ -22,75 +23,64 @@ export const HomePage = () => {
     const [recentRecords, setRecentRecords] = useState<RecordListDay[]>([]);
     const [todayRecords, setTodayRecords] = useState<RecordListGoal[]>([]);
     const [briefing, setBriefing] = useState<string>("");
-
-    useEffect(() => {
-        const fetchBriefing = async () => {
-            try {
-                const res = await getBriefing();
-                setBriefing(res.content);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchBriefing();
-    }, []);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchTodayRecords = async () => {
-        try {
-            const today = getKoreaToday(); // ← KST로 변경
-            const res = await getAllRecords();
-            const todayData = res.records.find(
-                (day: RecordListDay) => day.date === today,
-            );
-            setTodayRecords(todayData?.goals || []);
-        } catch (error) {
-            console.error(error);
-        }
+        const today = getKoreaToday();
+        const res = await getAllRecords();
+        const todayData = res.records.find(
+            (day: RecordListDay) => day.date === today,
+        );
+        setTodayRecords(todayData?.goals || []);
+    };
+
+    const fetchGoals = async () => {
+        const res = await getGoals();
+        setGoals(res.goals);
+    };
+
+    const fetchRecords = async () => {
+        const res = await getAllRecords();
+        setRecentRecords(res.records.slice(0, 4));
+    };
+
+    const fetchBriefing = async () => {
+        const res = await getBriefing();
+        setBriefing(res.content);
     };
 
     useEffect(() => {
-        const fetchGoals = async () => {
+        const fetchAll = async () => {
             try {
-                const res = await getGoals();
-                setGoals(res.goals);
+                setIsLoading(true);
+                await Promise.all([
+                    fetchGoals(),
+                    fetchRecords(),
+                    fetchBriefing(),
+                    fetchTodayRecords(),
+                ]);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsLoading(false);
             }
         };
-        fetchGoals();
-    }, []);
-
-    useEffect(() => {
-        const fetchRecords = async () => {
-            try {
-                const res = await getAllRecords();
-                setRecentRecords(res.records.slice(0, 4)); // 최근 4개만
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchRecords();
-    }, []);
-
-    useEffect(() => {
-        const initTodayRecords = async () => {
-            await fetchTodayRecords();
-        };
-        initTodayRecords();
+        fetchAll();
     }, []);
 
     const handleGoalSuccess = async () => {
         try {
-            const res = await getGoals();
-            setGoals(res.goals);
-            await fetchTodayRecords();
-
-            const recordRes = await getAllRecords();
-            setRecentRecords(recordRes.records.slice(0, 4));
+            await Promise.all([
+                fetchGoals(),
+                fetchTodayRecords(),
+                fetchRecords(),
+            ]);
         } catch (error) {
             console.error(error);
         }
     };
+
+    if (isLoading) return <LoadingSpinner />;
 
     return (
         <main className="flex flex-col gap-10 flex-1">

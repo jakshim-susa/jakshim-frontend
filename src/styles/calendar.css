@@ -22,13 +22,13 @@
     cursor: pointer;
     font-size: 16px;
     font-weight: 700;
-    color: #2e2e2e;
+    color: var(--color-text-primary);
     min-width: 44px;
     padding: 10px;
 }
 
 .react-calendar__navigation button:hover {
-    background: #f5f0dc;
+    background: var(--color-bg-secondary);
     border-radius: 12px;
 }
 
@@ -56,7 +56,7 @@
     padding: 8px 6px;
     font-size: 14px;
     font-weight: bold;
-    color: #2e2e2e;
+    color: var(--color-text-primary);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,7 +93,7 @@
     height: 50px;
     border-radius: 50%;
     background-color: var(--color-primary);
-    color: white;
+    color: var(--color-white);
 }
 
 /* 선택된 날짜 */
@@ -115,7 +115,7 @@
 
 /* 이전달 다음달 날짜 */
 .react-calendar__month-view__days__day--neighboringMonth {
-    color: #ccc5a8;
+    color: var(--color-secondary);
 }
 
 /* 모바일 동그라미 크기 */
@@ -136,7 +136,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    color: white;
+    color: var(--color-white);
 }
 
 .react-calendar__tile.tile-success abbr {
