@@ -27,7 +27,9 @@ export const WeeklyChart = ({ data, worstDay }: WeeklyChartProps) => {
                         <Cell
                             key={entry.dayOfWeek}
                             fill={
-                                entry.day === worstDay ? "#F5E97A" : "#8BAFC4"
+                                entry.day === worstDay
+                                    ? "var(--color-error)"
+                                    : "var(--color-success)"
                             }
                         />
                     ))}

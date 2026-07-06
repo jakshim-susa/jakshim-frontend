@@ -1,7 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
+import { useAuthStore } from "../../store/authStore";
 
 export const BottomNav = () => {
     const location = useLocation();
+    const { accessToken } = useAuthStore();
+
+    if (!accessToken) return null;
 
     const isActive = (path: string) => location.pathname === path;
 

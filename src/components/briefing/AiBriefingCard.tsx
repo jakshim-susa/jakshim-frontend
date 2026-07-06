@@ -7,7 +7,7 @@ interface AiBriefingCardProps {
 
 export const AiBriefingCard = ({ title, content }: AiBriefingCardProps) => {
     return (
-        <div className="flex items-center justify-start p-4 gap-5 bg-white border-1 border-border-primary rounded-lg overflow-hidden">
+        <div className="flex items-center justify-start p-4 gap-5 bg-bg-white border-1 border-border-primary rounded-lg overflow-hidden">
             <div className="shrink-0">
                 <img
                     src={analysisIcon}

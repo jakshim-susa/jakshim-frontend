@@ -15,32 +15,44 @@ export const Header = () => {
         applyTheme(theme);
     };
     return (
-        <header className="fixed top-0 left-0 z-50 w-full h-16 px-4 bg-secondary grid grid-cols-3 items-center">
+        <header className="fixed top-0 left-0 z-50 w-full h-16 px-4 bg-secondary grid grid-cols-2 md:grid-cols-3 items-center">
             {/* 왼쪽: 로고 */}
             <div className="justify-self-start">
                 <Logo />
             </div>
 
             {/* 가운데 네비게이션 */}
-            <nav className="justify-self-center flex items-center gap-8 hidden md:flex">
+            <nav className="justify-self-center items-center gap-12 hidden md:flex">
                 {accessToken && (
                     <>
                         {" "}
                         <Link
                             to="/home"
-                            className="text-text-primary hover:text-primary"
+                            className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                                location.pathname === "/home"
+                                    ? "bg-primary text-white font-bold"
+                                    : "text-text-primary hover:text-primary"
+                            }`}
                         >
                             홈
                         </Link>
                         <Link
                             to="/analysis"
-                            className="text-text-primary hover:text-primary"
+                            className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                                location.pathname === "/analysis"
+                                    ? "bg-primary text-white font-bold"
+                                    : "text-text-primary hover:text-primary"
+                            }`}
                         >
                             분석
                         </Link>
                         <Link
                             to="/record"
-                            className="text-text-primary hover:text-primary"
+                            className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                                location.pathname === "/record"
+                                    ? "bg-primary text-white font-bold"
+                                    : "text-text-primary hover:text-primary"
+                            }`}
                         >
                             기록 달력
                         </Link>
@@ -51,22 +63,22 @@ export const Header = () => {
             {/* 오른쪽: 로그인 여부에 따라 분기 */}
             <div className="justify-self-end flex items-center gap-4">
                 {/* 테마 토글 */}
-                <div className="flex items-center gap-1">
+                <div className=" items-center gap-1">
                     <button
                         onClick={() => handleThemeChange("light")}
-                        className="p-1.5 rounded-md hover:bg-secondary-hover text-text-muted"
+                        className="p-1.5 rounded-md hover:bg-secondary-hover text-text-muted cursor-pointer"
                     >
                         <Sun className="w-4 h-4" />
                     </button>
                     <button
                         onClick={() => handleThemeChange("dark")}
-                        className="p-1.5 rounded-md hover:bg-secondary-hover text-text-muted"
+                        className="p-1.5 rounded-md hover:bg-secondary-hover text-text-muted cursor-pointer"
                     >
                         <Moon className="w-4 h-4" />
                     </button>
                     <button
                         onClick={() => handleThemeChange("system")}
-                        className="p-1.5 rounded-md hover:bg-secondary-hover text-text-muted"
+                        className="p-1.5 rounded-md hover:bg-secondary-hover text-text-muted cursor-pointer"
                     >
                         <Monitor className="w-4 h-4" />
                     </button>
