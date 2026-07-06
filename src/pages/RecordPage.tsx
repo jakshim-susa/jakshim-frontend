@@ -1,32 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnalysisToggle } from "../components/analysis/AnalysisToggle";
 import { Greeting } from "../components/common/Greeting";
 import { ListView } from "../components/record/ListView";
 import { CalendarView } from "../components/record/CalendarView";
 import { useLocation } from "react-router-dom";
-
-// 예시
-interface RawRecord {
-    id: string;
-    createdAt: string; // "2026-06-20"
-    todos: { id: string; title: string }[];
-}
-
-const rawRecords: RawRecord[] = [
-    {
-        id: "1",
-        createdAt: "2026-06-20",
-        todos: [
-            { id: "a", title: "매일 운동하기" },
-            { id: "b", title: "매일 운동하기" },
-        ],
-    },
-    {
-        id: "2",
-        createdAt: "2026-06-19",
-        todos: [{ id: "c", title: "매일 운동하기" }],
-    },
-];
+import type { RecordListDay } from "../types/record";
+import { getAllRecords } from "../api/record";
 
 const formatDate = (iso: string) => {
     const d = new Date(iso);
@@ -38,17 +17,31 @@ const getDayLabel = (iso: string) => {
     return days[new Date(iso).getDay()];
 };
 
-const items = rawRecords.map((record) => ({
-    date: formatDate(record.createdAt),
-    dayLabel: getDayLabel(record.createdAt),
-    tasks: record.todos.map((t) => t.title),
-}));
-
 export const RecordPage = () => {
     const location = useLocation();
+    const [records, setRecords] = useState<RecordListDay[]>([]);
     const [view, setView] = useState<"calendar" | "list">(
         location.state?.view || "calendar",
     );
+
+    useEffect(() => {
+        const fetchRecords = async () => {
+            const res = await getAllRecords();
+            setRecords(res.records);
+        };
+        fetchRecords();
+    }, []);
+
+    const items = records.map((day) => ({
+        date: formatDate(day.date),
+        dayLabel: getDayLabel(day.date),
+        tasks: day.goals.map((goal) => ({
+            goalTitle: goal.goal,
+            status: goal.status,
+            reasonCategory: goal.reasonCategory,
+        })),
+    }));
+
     return (
         <main>
             <div className="flex flex-col gap-10">
@@ -57,7 +50,11 @@ export const RecordPage = () => {
                     <AnalysisToggle
                         leftLabel="달력"
                         rightLabel="리스트"
-                    ></AnalysisToggle>
+                        selected={view === "calendar" ? "left" : "right"}
+                        onChange={(value) =>
+                            setView(value === "left" ? "calendar" : "list")
+                        }
+                    />
                 </div>
                 {view === "calendar" ? (
                     <CalendarView />
