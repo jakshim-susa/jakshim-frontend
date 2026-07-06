@@ -9,12 +9,30 @@ import { useEffect, useState } from "react";
 import { getGoals } from "../api/goal";
 import type { Goal } from "../types/goal";
 import { GoalCreateModal } from "../components/goal/GoalCreateModal";
+import type { RecordListDay, RecordListGoal } from "../types/record";
+import { getAllRecords } from "../api/record";
+import { getFormattedDate, getKoreaToday } from "../utils/date";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
     const [goals, setGoals] = useState<Goal[]>([]);
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [recentRecords, setRecentRecords] = useState<RecordListDay[]>([]);
+    const [todayRecords, setTodayRecords] = useState<RecordListGoal[]>([]);
+
+    const fetchTodayRecords = async () => {
+        try {
+            const today = getKoreaToday(); // ← KST로 변경
+            const res = await getAllRecords();
+            const todayData = res.records.find(
+                (day: RecordListDay) => day.date === today,
+            );
+            setTodayRecords(todayData?.goals || []);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         const fetchGoals = async () => {
@@ -28,10 +46,33 @@ export const HomePage = () => {
         fetchGoals();
     }, []);
 
+    useEffect(() => {
+        const fetchRecords = async () => {
+            try {
+                const res = await getAllRecords();
+                setRecentRecords(res.records.slice(0, 4)); // 최근 4개만
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchRecords();
+    }, []);
+
+    useEffect(() => {
+        const initTodayRecords = async () => {
+            await fetchTodayRecords();
+        };
+        initTodayRecords();
+    }, []);
+
     const handleGoalSuccess = async () => {
         try {
             const res = await getGoals();
             setGoals(res.goals);
+            await fetchTodayRecords();
+
+            const recordRes = await getAllRecords();
+            setRecentRecords(recordRes.records.slice(0, 4));
         } catch (error) {
             console.error(error);
         }
@@ -42,7 +83,7 @@ export const HomePage = () => {
             <div className="flex flex-col gap-2">
                 <Greeting>안녕하세요, {nickname}님👋</Greeting>
                 <p className="text-sm md:text-lg text-text-muted">
-                    2026년 6월 28일 일요일
+                    {getFormattedDate()}
                 </p>
                 <div className="text-xs text-white text-center rounded-2xl bg-success w-[130px]">
                     🔥12일 연속 성공 중!
@@ -80,7 +121,18 @@ export const HomePage = () => {
                         </p>
                     ) : (
                         goals.map((goal) => (
-                            <GoalList key={goal.goalId}>{goal.title}</GoalList>
+                            <GoalList
+                                key={goal.goalId}
+                                goalId={goal.goalId}
+                                status={
+                                    todayRecords.find(
+                                        (r) => r.goalId === goal.goalId,
+                                    )?.status || null
+                                }
+                                onSuccess={handleGoalSuccess}
+                            >
+                                {goal.title}
+                            </GoalList>
                         ))
                     )}
                 </div>
@@ -98,10 +150,25 @@ export const HomePage = () => {
                             전체 보기
                         </p>
                     </div>
-                    <RecordList reason="피곤했다.." category="😓피로" />
-                    <RecordList reason="피곤했다.." category="😓피로" />
-                    <RecordList reason="피곤했다.." category="😓피로" />
-                    <RecordList reason="피곤했다.." category="😓피로" />
+                    {recentRecords.length === 0 ? (
+                        <p className="text-text-muted text-sm">
+                            최근 기록이 없어요.
+                        </p>
+                    ) : (
+                        recentRecords.map((day) =>
+                            day.goals
+                                .filter((goal) => goal.status !== null)
+                                .map((goal) => (
+                                    <RecordList
+                                        key={goal.goalId}
+                                        date={day.date}
+                                        goalTitle={goal.goal}
+                                        status={goal.status}
+                                        reasonCategory={goal.reasonCategory}
+                                    />
+                                )),
+                        )
+                    )}
                 </div>
             </div>
         </main>
