@@ -24,7 +24,9 @@ const DailyRecordItem = ({ date, dayLabel, tasks }: DailyRecordItemProps) => {
                                           : "bg-gray-300"
                                 }`}
                             />
-                            <span>{task.goalTitle}</span>
+                            <span className="text-text-primary">
+                                {task.goalTitle}
+                            </span>
                             {task.status === null && (
                                 <span className="text-xs text-text-muted">
                                     미기록
