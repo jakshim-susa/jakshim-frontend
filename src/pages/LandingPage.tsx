@@ -6,14 +6,13 @@ import { CenteredPageLayout } from "../components/layout/CenteredPageLayout";
 export const LandingPage = () => {
     return (
         <CenteredPageLayout>
-            <div className="flex items-center justify-center mb-5 max-w-[1200px] mx-auto">
+            <div className="grid grid-cols-2 items-center justify-center mb-5 max-w-[1200px] mx-auto text-text-primary">
                 <div>
-                    <div className="font-logo text-7xl mb-5">작심삼일</div>
-                    <div className="font-logo text-7xl">
-                        수사대
-                        <span className="inline-block scale-x-[-1] text-6xl">
+                    <div className="font-logo text-4xl mb-2 md:text-6xl md:mb-5">
+                        작심삼일 수사대
+                        {/* <span className="inline-block scale-x-[-1] text-3xl md:text-5xl">
                             🔎
-                        </span>
+                        </span> */}
                     </div>
                     <p className="my-4 pl-1 text-text-muted font-semibold">
                         당신의 습관을 수사하여, <br />
@@ -27,7 +26,11 @@ export const LandingPage = () => {
                     </Link>
                 </div>
                 <div>
-                    <img src={landingIcon} alt="로고 이미지" className="w-lg" />
+                    <img
+                        src={landingIcon}
+                        alt="로고 이미지"
+                        className="w-xs md:w-lg"
+                    />
                 </div>
             </div>
         </CenteredPageLayout>
