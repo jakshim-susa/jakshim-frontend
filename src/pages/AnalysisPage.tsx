@@ -1,66 +1,107 @@
-import { AiBriefingCard } from "../components/briefing/AiBriefingCard";
-import { Greeting } from "../components/common/Greeting";
-import { StatCard } from "../components/analysis/StatCardProps";
+import { useEffect, useState } from "react";
+import { getSummary, getWeekly, getReasons } from "../api/analysis";
+import type { Summary, Weekly, Reasons } from "../types/analysis";
 import { Tag } from "../components/common/Tag";
+import { Greeting } from "../components/common/Greeting";
+import { AiBriefingCard } from "../components/briefing/AiBriefingCard";
+import { StatCard } from "../components/record/StatCard";
 import { useAuthStore } from "../store/authStore";
+import { WeeklyChart } from "../components/analysis/WeeklyChart";
+import { ReasonsChart } from "../components/analysis/ReasonsChart";
 
 export const AnalysisPage = () => {
     const { nickname } = useAuthStore();
+    const [summary, setSummary] = useState<Summary | null>(null);
+    const [weekly, setWeekly] = useState<Weekly | null>(null);
+    const [reasons, setReasons] = useState<Reasons | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [summaryRes, weeklyRes, reasonsRes] = await Promise.all([
+                    getSummary(),
+                    getWeekly(),
+                    getReasons(),
+                ]);
+                setSummary(summaryRes);
+                setWeekly(weeklyRes);
+                setReasons(reasonsRes);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const successRate = summary
+        ? Math.round(
+              (summary.totalSuccess /
+                  (summary.totalSuccess + summary.totalFail)) *
+                  100,
+          )
+        : 0;
+
     return (
         <main className="flex flex-col gap-8 flex-1">
             <Greeting>안녕하세요, {nickname}님👋</Greeting>
             <AiBriefingCard
                 title="수사 보고서"
-                content="수요일과 금요일 저녁 실패율이 높고, 유튜브·침대·야식 키워드가 반복됩니다. 저녁 루틴을 바꿔보는 게 핵심이에요."
+                content="수요일과 금요일 저녁 실패율이 높고, 유튜브·침대·야식 키워드가 반복됩니다."
             />
 
+            {/* 통계 카드 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <StatCard value={`${successRate}%`} label="성공률" />
                 <StatCard
-                    icon="📊"
-                    value="72%"
-                    label="성공률"
-                    trend={{ direction: "up", value: "지난달 +8%" }}
-                ></StatCard>
-                <StatCard
-                    icon="🔥"
-                    value="9일"
+                    // icon="🔥"
+                    value={`${summary?.maxStreak || 0}일`}
                     label="연속 성공 최고"
-                ></StatCard>
+                />
                 <StatCard
-                    icon="📆"
-                    value="4.7일"
-                    label="평균 지속일"
-                    trend={{ direction: "up", value: "+ 1.3일" }}
-                ></StatCard>
+                    // icon="📆"
+                    value={`${summary?.currentStreak || 0}일`}
+                    label="현재 연속 성공"
+                />
             </div>
 
             <hr />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 text-text-primary">
+            {/* 차트 영역 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-text-primary">
                 <div className="flex flex-col gap-2">
-                    <p>가장 많이 실패하는 요인</p>
-                    <div>차트</div>
-                    <p>당신은 매주 월요일에 95% 확률로 무너집니다.</p>
+                    <p className="font-semibold">가장 많이 실패하는 요일</p>
+                    {weekly && (
+                        <WeeklyChart
+                            data={weekly.weekly}
+                            worstDay={weekly.worstDay}
+                        />
+                    )}
+                    {weekly?.worstDay && (
+                        <p className="text-sm text-text-muted">
+                            당신은 매주 {weekly.worstDay}요일에 가장 많이
+                            실패해요.
+                        </p>
+                    )}
                 </div>
-                <div>
-                    <p>실패 원인 분석</p>
-                    <div>
-                        <div>차트</div>
-                    </div>
+                <div className="flex flex-col gap-2">
+                    <p className="font-semibold">실패 원인 분석</p>
+                    {reasons && reasons.reasons.length > 0 && (
+                        <ReasonsChart data={reasons.reasons} />
+                    )}
                 </div>
             </div>
 
             <hr />
+
+            {/* 키워드 태그 */}
             <div className="flex flex-col gap-2">
                 <p>자주 등장하는 키워드</p>
                 <div className="flex flex-wrap gap-2">
-                    <Tag size="md"># 유튜브</Tag>
-                    <Tag size="md"># 유튜브</Tag>
-                    <Tag size="md"># 유튜브</Tag>
-                    <Tag size="md"># 유튜브</Tag>
-                    <Tag size="md"># 유튜브</Tag>
-                    <Tag size="md"># 유튜브</Tag>
-                    <Tag size="md"># 유튜브</Tag>
+                    {reasons?.reasons.map((reason) => (
+                        <Tag key={reason.rank} size="md">
+                            # {reason.reasonCategory}
+                        </Tag>
+                    ))}
                 </div>
             </div>
         </main>
