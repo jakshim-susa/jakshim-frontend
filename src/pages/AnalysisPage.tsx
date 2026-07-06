@@ -8,6 +8,7 @@ import { StatCard } from "../components/record/StatCard";
 import { useAuthStore } from "../store/authStore";
 import { WeeklyChart } from "../components/analysis/WeeklyChart";
 import { ReasonsChart } from "../components/analysis/ReasonsChart";
+import { LoadingSpinner } from "../components/common/LoadingSpinner";
 
 export const AnalysisPage = () => {
     const { nickname } = useAuthStore();
@@ -15,35 +16,30 @@ export const AnalysisPage = () => {
     const [weekly, setWeekly] = useState<Weekly | null>(null);
     const [reasons, setReasons] = useState<Reasons | null>(null);
     const [insight, setInsight] = useState<string>("");
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchInsight = async () => {
+        const fetchAll = async () => {
             try {
-                const res = await getInsight();
-                setInsight(res.content);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchInsight();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [summaryRes, weeklyRes, reasonsRes] = await Promise.all([
-                    getSummary(),
-                    getWeekly(),
-                    getReasons(),
-                ]);
+                setIsLoading(true);
+                const [summaryRes, weeklyRes, reasonsRes, insightRes] =
+                    await Promise.all([
+                        getSummary(),
+                        getWeekly(),
+                        getReasons(),
+                        getInsight(),
+                    ]);
                 setSummary(summaryRes);
                 setWeekly(weeklyRes);
                 setReasons(reasonsRes);
+                setInsight(insightRes.content);
             } catch (error) {
                 console.error(error);
+            } finally {
+                setIsLoading(false);
             }
         };
-        fetchData();
+        fetchAll();
     }, []);
 
     const successRate = summary
@@ -53,6 +49,8 @@ export const AnalysisPage = () => {
                   100,
           )
         : 0;
+
+    if (isLoading) return <LoadingSpinner />;
 
     return (
         <main className="flex flex-col gap-8 flex-1">
@@ -108,7 +106,7 @@ export const AnalysisPage = () => {
 
             {/* 키워드 태그 */}
             <div className="flex flex-col gap-2">
-                <p>자주 등장하는 키워드</p>
+                <p className="text-text-primary">자주 등장하는 키워드</p>
                 <div className="flex flex-wrap gap-2">
                     {reasons?.reasons.map((reason) => (
                         <Tag key={reason.rank} size="md">
