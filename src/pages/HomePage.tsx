@@ -12,6 +12,7 @@ import { GoalCreateModal } from "../components/goal/GoalCreateModal";
 import type { RecordListDay, RecordListGoal } from "../types/record";
 import { getAllRecords } from "../api/record";
 import { getFormattedDate, getKoreaToday } from "../utils/date";
+import { getBriefing } from "../api/analysis";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
@@ -20,6 +21,19 @@ export const HomePage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [recentRecords, setRecentRecords] = useState<RecordListDay[]>([]);
     const [todayRecords, setTodayRecords] = useState<RecordListGoal[]>([]);
+    const [briefing, setBriefing] = useState<string>("");
+
+    useEffect(() => {
+        const fetchBriefing = async () => {
+            try {
+                const res = await getBriefing();
+                setBriefing(res.content);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchBriefing();
+    }, []);
 
     const fetchTodayRecords = async () => {
         try {
@@ -91,7 +105,7 @@ export const HomePage = () => {
             </div>
             <AiBriefingCard
                 title="AI 브리핑"
-                content="밤 10시 이후  취침이 운동 실패와 가장 높은 관련성을 보입니다. 오늘은 저녁 10시 전에 완료해 보세요."
+                content={briefing || "브리핑을 불러오는 중..."}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
