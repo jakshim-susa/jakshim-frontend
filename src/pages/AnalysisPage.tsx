@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getSummary, getWeekly, getReasons } from "../api/analysis";
+import { getSummary, getWeekly, getReasons, getInsight } from "../api/analysis";
 import type { Summary, Weekly, Reasons } from "../types/analysis";
 import { Tag } from "../components/common/Tag";
 import { Greeting } from "../components/common/Greeting";
@@ -14,6 +14,19 @@ export const AnalysisPage = () => {
     const [summary, setSummary] = useState<Summary | null>(null);
     const [weekly, setWeekly] = useState<Weekly | null>(null);
     const [reasons, setReasons] = useState<Reasons | null>(null);
+    const [insight, setInsight] = useState<string>("");
+
+    useEffect(() => {
+        const fetchInsight = async () => {
+            try {
+                const res = await getInsight();
+                setInsight(res.content);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchInsight();
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -46,7 +59,7 @@ export const AnalysisPage = () => {
             <Greeting>안녕하세요, {nickname}님👋</Greeting>
             <AiBriefingCard
                 title="수사 보고서"
-                content="수요일과 금요일 저녁 실패율이 높고, 유튜브·침대·야식 키워드가 반복됩니다."
+                content={insight || "인사이트를 불러오는 중..."}
             />
 
             {/* 통계 카드 */}
