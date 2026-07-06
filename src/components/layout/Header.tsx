@@ -1,13 +1,19 @@
 import { Link, useLocation } from "react-router-dom";
 import { Logo } from "../common/Logo";
+import { useAuthStore } from "../../store/authStore";
+import { applyTheme, type Theme } from "../../utils/theme";
+import { Monitor, Moon, Sun } from "lucide-react";
 
 export const Header = () => {
-    const isLoggedIn = true;
+    const { accessToken } = useAuthStore();
 
     const location = useLocation();
     const isLoginPage = location.pathname === "/login";
     const isSignupPage = location.pathname === "/signup";
 
+    const handleThemeChange = (theme: Theme) => {
+        applyTheme(theme);
+    };
     return (
         <header className="fixed top-0 left-0 z-50 w-full h-16 px-4 bg-secondary grid grid-cols-3 items-center">
             {/* 왼쪽: 로고 */}
@@ -17,7 +23,7 @@ export const Header = () => {
 
             {/* 가운데 네비게이션 */}
             <nav className="justify-self-center flex items-center gap-8 hidden md:flex">
-                {isLoggedIn && (
+                {accessToken && (
                     <>
                         {" "}
                         <Link
@@ -44,7 +50,28 @@ export const Header = () => {
 
             {/* 오른쪽: 로그인 여부에 따라 분기 */}
             <div className="justify-self-end flex items-center gap-4">
-                {isLoggedIn ? (
+                {/* 테마 토글 */}
+                <div className="flex items-center gap-1">
+                    <button
+                        onClick={() => handleThemeChange("light")}
+                        className="p-1.5 rounded-md hover:bg-secondary-hover text-text-muted"
+                    >
+                        <Sun className="w-4 h-4" />
+                    </button>
+                    <button
+                        onClick={() => handleThemeChange("dark")}
+                        className="p-1.5 rounded-md hover:bg-secondary-hover text-text-muted"
+                    >
+                        <Moon className="w-4 h-4" />
+                    </button>
+                    <button
+                        onClick={() => handleThemeChange("system")}
+                        className="p-1.5 rounded-md hover:bg-secondary-hover text-text-muted"
+                    >
+                        <Monitor className="w-4 h-4" />
+                    </button>
+                </div>
+                {accessToken ? (
                     <>
                         {/* <span>{user?.name}님</span>
                         <button onClick={logout}>로그아웃</button> */}
