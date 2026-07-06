@@ -13,7 +13,7 @@ interface ReasonsChartProps {
     data: ReasonItem[];
 }
 
-const COLORS = ["#8BAFC4", "#F5E97A", "#CCC5A8", "#2E2E2E"];
+const COLORS = ["#5a8dee", "#f4c542", "#8a8a8a"];
 
 export const ReasonsChart = ({ data }: ReasonsChartProps) => {
     return (

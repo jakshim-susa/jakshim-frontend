@@ -15,7 +15,7 @@ export const FailReasonModal = ({
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-6 w-full max-w-md flex flex-col gap-4">
+            <div className="bg-bg-white rounded-xl p-6 w-full max-w-md flex flex-col gap-4">
                 <h2 className="text-xl font-bold text-text-primary">
                     실패 이유
                 </h2>

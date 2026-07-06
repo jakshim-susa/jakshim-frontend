@@ -18,7 +18,7 @@ export const Button = ({
     fullWidth = false,
 }: ButtonProps) => {
     const variantStyle = {
-        primary: "bg-primary text-white hover:bg-primary-hover",
+        primary: "bg-primary text-text-white hover:bg-primary-hover",
         secondary: "bg-secondary text-text-primary hover:bg-secondary-hover",
         danger: "bg-danger text-white hover:bg-danger-hover",
         kakao: "bg-[#FEE500] text-text-primary hover:bg-[#FDD800]",
