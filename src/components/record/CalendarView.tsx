@@ -16,7 +16,6 @@ export const CalendarView = () => {
     );
     const [selectedDiary, setSelectedDiary] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true); // ← 추가
-    const [isDateLoading, setIsDateLoading] = useState(false); // ← 날짜 클릭 로딩
 
     const handleDateClick = async (date: Date) => {
         setValue(date);
@@ -25,14 +24,11 @@ export const CalendarView = () => {
         setSelectedDate(dateStr);
 
         try {
-            setIsDateLoading(true); // ← 추가
             const res = await getRecordsByDate(dateStr);
             setSelectedRecords(res.records);
             setSelectedDiary(res.diary?.content || null);
         } catch (error) {
             console.error(error);
-        } finally {
-            setIsDateLoading(false); // ← 추가
         }
     };
 

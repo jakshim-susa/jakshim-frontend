@@ -17,11 +17,13 @@ export const useAuthStore = create<AuthStore>()(
             theme: null,
             setAuth: (accessToken, nickname, theme) =>
                 set({ accessToken, nickname, theme }),
-            clearAuth: () =>
-                set({ accessToken: null, nickname: null, theme: null }),
+            clearAuth: () => {
+                set({ accessToken: null, nickname: null, theme: null });
+                localStorage.removeItem("auth-storage");
+            },
         }),
         {
-            name: "auth-storage", // localStorage 키 이름
+            name: "auth-storage",
         },
     ),
 );
