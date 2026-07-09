@@ -1,9 +1,10 @@
-import { Check, Dumbbell, X } from "lucide-react";
+import { Check, Dumbbell, Trash2, X } from "lucide-react";
 import type React from "react";
 import { createRecord, deleteRecord, updateRecord } from "../../api/record";
 import { useState } from "react";
 import { FailReasonModal } from "./FailReasonModal";
 import toast from "react-hot-toast";
+import { deleteGoal, updateGoal } from "../../api/goal";
 
 interface GoalListProps {
     children: React.ReactNode;
@@ -22,6 +23,61 @@ export const GoalList = ({
 }: GoalListProps) => {
     const [isFailModalOpen, setIsFailModalOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editTitle, setEditTitle] = useState(String(children));
+
+    // 목표 수정
+    const handleSave = async () => {
+        try {
+            await updateGoal(goalId, { title: editTitle });
+            setIsEditing(false);
+            onSuccess();
+            toast.success("목표가 수정됐어요!");
+        } catch (error) {
+            toast.error("수정에 실패했어요.");
+            console.error(error);
+        }
+    };
+
+    // 목표 삭제
+    const handleDeleteGoal = () => {
+        toast(
+            (t) => (
+                <div className="flex flex-col gap-2">
+                    <p className="text-sm font-medium">
+                        목표를 삭제하시겠어요?
+                    </p>
+                    <p className="text-xs text-gray-500">
+                        관련 기록도 모두 삭제돼요.
+                    </p>
+                    <div className="flex gap-2  justify-center">
+                        <button
+                            className="px-3 py-1 text-xs bg-error text-white rounded-md cursor-pointer"
+                            onClick={async () => {
+                                toast.dismiss(t.id);
+                                try {
+                                    await deleteGoal(goalId);
+                                    onSuccess();
+                                    toast.success("목표가 삭제됐어요.");
+                                } catch {
+                                    toast.error("삭제에 실패했어요.");
+                                }
+                            }}
+                        >
+                            삭제
+                        </button>
+                        <button
+                            className="px-3 py-1 text-xs bg-gray-200 rounded-md cursor-pointer"
+                            onClick={() => toast.dismiss(t.id)}
+                        >
+                            취소
+                        </button>
+                    </div>
+                </div>
+            ),
+            { duration: Infinity },
+        );
+    };
 
     const handleSuccess = async () => {
         try {
@@ -89,9 +145,29 @@ export const GoalList = ({
     return (
         <>
             <div className="flex justify-between mb-4">
-                <div className="flex items-center gap-8">
-                    <Dumbbell className="w-5 h-5 text-text-primary" />
-                    <div className="text-text-primary">{children}</div>
+                <div className="flex items-center gap-4">
+                    <Dumbbell className="w-5 h-5 text-text-primary shrink-0" />
+                    {isEditing ? (
+                        <input
+                            className="text-text-primary border-b border-primary focus:outline-none bg-transparent"
+                            value={editTitle}
+                            onChange={(e) => setEditTitle(e.target.value)}
+                            onBlur={handleSave}
+                            onKeyDown={(e) => e.key === "Enter" && handleSave()}
+                            autoFocus
+                        />
+                    ) : (
+                        <div
+                            className="text-text-primary cursor-pointer"
+                            onDoubleClick={() => setIsEditing(true)}
+                        >
+                            {children}
+                        </div>
+                    )}
+                    <Trash2
+                        className="w-4 h-4 text-text-muted cursor-pointer hover:text-error shrink-0"
+                        onClick={handleDeleteGoal}
+                    />
                 </div>
                 <div className="flex gap-3">
                     {isUpdating ? (

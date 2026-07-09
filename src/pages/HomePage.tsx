@@ -12,7 +12,8 @@ import { GoalCreateModal } from "../components/goal/GoalCreateModal";
 import type { RecordListDay, RecordListGoal } from "../types/record";
 import { getAllRecords } from "../api/record";
 import { getFormattedDate, getKoreaToday } from "../utils/date";
-import { getBriefing } from "../api/analysis";
+import { getBriefing, getSummary } from "../api/analysis";
+import type { Summary } from "../types/analysis";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
@@ -22,6 +23,12 @@ export const HomePage = () => {
     const [recentRecords, setRecentRecords] = useState<RecordListDay[]>([]);
     const [todayRecords, setTodayRecords] = useState<RecordListGoal[]>([]);
     const [briefing, setBriefing] = useState<string>("");
+    const [summary, setSummary] = useState<Summary | null>(null);
+
+    const fetchSummary = async () => {
+        const res = await getSummary();
+        setSummary(res);
+    };
 
     const fetchTodayRecords = async () => {
         const today = getKoreaToday();
@@ -48,23 +55,22 @@ export const HomePage = () => {
     };
 
     useEffect(() => {
-        const initGoals = async () => {
+        // 목표, 기록, 연속성공일 같이 호출
+        const initData = async () => {
             try {
-                await fetchGoals();
+                await Promise.all([
+                    fetchGoals(),
+                    fetchRecords(),
+                    fetchTodayRecords(),
+                    fetchSummary(),
+                ]);
             } catch (error) {
                 console.error(error);
             }
         };
+        initData();
 
-        const initRecords = async () => {
-            try {
-                await fetchRecords();
-                await fetchTodayRecords();
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
+        // AI 브리핑은 Gemini API 호출이라 따로 처리
         const initBriefing = async () => {
             try {
                 await fetchBriefing();
@@ -72,9 +78,6 @@ export const HomePage = () => {
                 console.error(error);
             }
         };
-
-        initGoals();
-        initRecords();
         initBriefing();
     }, []);
 
@@ -97,9 +100,11 @@ export const HomePage = () => {
                 <p className="text-sm md:text-lg text-text-muted">
                     {getFormattedDate()}
                 </p>
-                <div className="text-xs text-white text-center rounded-2xl bg-success w-[130px]">
-                    🔥12일 연속 성공 중!
-                </div>
+                {summary?.currentStreak ? (
+                    <div className="text-xs text-white text-center rounded-2xl bg-success w-[130px]">
+                        🔥{summary.currentStreak}일 연속 성공 중!
+                    </div>
+                ) : null}
             </div>
             <AiBriefingCard
                 title="AI 브리핑"
