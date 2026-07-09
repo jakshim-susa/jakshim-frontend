@@ -53,7 +53,7 @@ export const AnalysisPage = () => {
         : 0;
 
     return (
-        <main className="flex flex-col gap-8 flex-1">
+        <main className="flex flex-col gap-8 flex-1 animate-fade-in">
             <Greeting>안녕하세요, {nickname}님👋</Greeting>
             <AiBriefingCard
                 title="수사 보고서"

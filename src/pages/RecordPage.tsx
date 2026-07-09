@@ -43,7 +43,7 @@ export const RecordPage = () => {
     }));
 
     return (
-        <main>
+        <main className="animate-fade-in">
             <div className="flex flex-col gap-10">
                 <div className="flex justify-between items-center">
                     <Greeting>수사 캘린더 📆</Greeting>

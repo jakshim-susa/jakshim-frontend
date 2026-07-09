@@ -94,7 +94,7 @@ export const HomePage = () => {
     };
 
     return (
-        <main className="flex flex-col gap-10 flex-1">
+        <main className="flex flex-col gap-10 flex-1 animate-fade-in">
             <div className="flex flex-col gap-2">
                 <Greeting>안녕하세요, {nickname}님👋</Greeting>
                 <p className="text-sm md:text-lg text-text-muted">
