@@ -13,7 +13,6 @@ import type { RecordListDay, RecordListGoal } from "../types/record";
 import { getAllRecords } from "../api/record";
 import { getFormattedDate, getKoreaToday } from "../utils/date";
 import { getBriefing } from "../api/analysis";
-import { LoadingSpinner } from "../components/common/LoadingSpinner";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
@@ -23,7 +22,6 @@ export const HomePage = () => {
     const [recentRecords, setRecentRecords] = useState<RecordListDay[]>([]);
     const [todayRecords, setTodayRecords] = useState<RecordListGoal[]>([]);
     const [briefing, setBriefing] = useState<string>("");
-    const [isLoading, setIsLoading] = useState(true);
 
     const fetchTodayRecords = async () => {
         const today = getKoreaToday();
@@ -50,22 +48,34 @@ export const HomePage = () => {
     };
 
     useEffect(() => {
-        const fetchAll = async () => {
+        const initGoals = async () => {
             try {
-                setIsLoading(true);
-                await Promise.all([
-                    fetchGoals(),
-                    fetchRecords(),
-                    fetchBriefing(),
-                    fetchTodayRecords(),
-                ]);
+                await fetchGoals();
             } catch (error) {
                 console.error(error);
-            } finally {
-                setIsLoading(false);
             }
         };
-        fetchAll();
+
+        const initRecords = async () => {
+            try {
+                await fetchRecords();
+                await fetchTodayRecords();
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        const initBriefing = async () => {
+            try {
+                await fetchBriefing();
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        initGoals();
+        initRecords();
+        initBriefing();
     }, []);
 
     const handleGoalSuccess = async () => {
@@ -79,8 +89,6 @@ export const HomePage = () => {
             console.error(error);
         }
     };
-
-    if (isLoading) return <LoadingSpinner />;
 
     return (
         <main className="flex flex-col gap-10 flex-1">
