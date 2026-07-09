@@ -59,6 +59,8 @@ export const GoalList = ({
     };
 
     const handleFailSubmit = async (reasonText: string) => {
+        setIsFailModalOpen(false);
+
         try {
             if (recordId) {
                 // 기록 있으면 수정
@@ -70,7 +72,6 @@ export const GoalList = ({
                 toast("실패로 기록됐어요.", { icon: "❌" });
             }
             onSuccess();
-            setIsFailModalOpen(false);
         } catch (error) {
             toast.error("기록에 실패했어요.");
             console.error(error);
