@@ -134,3 +134,7 @@ hr {
 .animate-fade-in {
     animation: fadeIn 0.5s ease-out;
 }
+
+::placeholder {
+    color: var(--color-text-muted);
+}
