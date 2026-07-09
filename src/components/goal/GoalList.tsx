@@ -21,9 +21,11 @@ export const GoalList = ({
     onSuccess,
 }: GoalListProps) => {
     const [isFailModalOpen, setIsFailModalOpen] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const handleSuccess = async () => {
         try {
+            setIsUpdating(true);
             if (recordId && status === "success") {
                 // 이미 성공인데 또 누르면 -> 삭제
                 await deleteRecord(recordId);
@@ -37,22 +39,26 @@ export const GoalList = ({
                 await createRecord({ goalId, status: "success" });
                 toast.success("성공으로 기록됐어요!");
             }
-            onSuccess();
         } catch (error) {
             toast.error("기록에 실패했어요.");
             console.error(error);
+        } finally {
+            setIsUpdating(false);
+            onSuccess();
         }
     };
 
     const handleFail = () => {
         if (recordId && status === "fail") {
+            setIsUpdating(true);
             // 이미 실패면 모달 없이 바로 삭제
             deleteRecord(recordId)
                 .then(() => {
-                    onSuccess();
                     toast("❌ 실패 체크가 해제됐어요.");
                 })
-                .catch(() => toast.error("오류가 발생했어요."));
+                .catch(() => toast.error("오류가 발생했어요."))
+                .finally(() => setIsUpdating(false));
+            onSuccess();
             return;
         }
         setIsFailModalOpen(true);
@@ -60,7 +66,7 @@ export const GoalList = ({
 
     const handleFailSubmit = async (reasonText: string) => {
         setIsFailModalOpen(false);
-
+        setIsUpdating(true);
         try {
             if (recordId) {
                 // 기록 있으면 수정
@@ -71,10 +77,12 @@ export const GoalList = ({
                 await createRecord({ goalId, status: "fail", reasonText });
                 toast("실패로 기록됐어요.", { icon: "❌" });
             }
-            onSuccess();
         } catch (error) {
             toast.error("기록에 실패했어요.");
             console.error(error);
+        } finally {
+            setIsUpdating(false);
+            onSuccess();
         }
     };
 
@@ -86,24 +94,25 @@ export const GoalList = ({
                     <div className="text-text-primary">{children}</div>
                 </div>
                 <div className="flex gap-3">
-                    <Check
-                        className={`w-8 h-8 p-1 rounded-sm border-1 cursor-pointer
-                            ${
-                                status === "success"
-                                    ? "bg-success text-white"
-                                    : "text-success bg-white hover:bg-success hover:text-white"
-                            } `}
-                        onClick={handleSuccess}
-                    />
-                    <X
-                        className={`w-8 h-8 p-1 rounded-sm border-1 cursor-pointer
-                            ${
-                                status === "fail"
-                                    ? "bg-error text-white"
-                                    : "text-error bg-white hover:bg-error hover:text-white"
-                            }`}
-                        onClick={handleFail}
-                    />
+                    {isUpdating ? (
+                        // 로딩 중일 때 스피너 표시
+                        <div className="w-8 h-8 flex items-center justify-center">
+                            <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                        </div>
+                    ) : (
+                        <>
+                            <Check
+                                className={`w-8 h-8 p-1 rounded-sm border-1 cursor-pointer
+                    ${status === "success" ? "bg-success text-white" : "text-success bg-white hover:bg-success hover:text-white"}`}
+                                onClick={handleSuccess}
+                            />
+                            <X
+                                className={`w-8 h-8 p-1 rounded-sm border-1 cursor-pointer
+                    ${status === "fail" ? "bg-error text-white" : "text-error bg-white hover:bg-error hover:text-white"}`}
+                                onClick={handleFail}
+                            />
+                        </>
+                    )}
                 </div>
             </div>
             <hr className="text-border-primary mb-4" />
