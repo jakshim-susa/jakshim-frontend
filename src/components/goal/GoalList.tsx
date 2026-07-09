@@ -3,6 +3,7 @@ import type React from "react";
 import { createRecord, deleteRecord, updateRecord } from "../../api/record";
 import { useState } from "react";
 import { FailReasonModal } from "./FailReasonModal";
+import toast from "react-hot-toast";
 
 interface GoalListProps {
     children: React.ReactNode;
@@ -26,15 +27,19 @@ export const GoalList = ({
             if (recordId && status === "success") {
                 // 이미 성공인데 또 누르면 -> 삭제
                 await deleteRecord(recordId);
+                toast("✅ 성공 체크가 해제됐어요.");
             } else if (recordId) {
                 // 기록이 있으면 수정
                 await updateRecord(recordId, { status: "success" });
+                toast.success("성공으로 수정됐어요!");
             } else {
                 // 기록 없으면 생성
                 await createRecord({ goalId, status: "success" });
+                toast.success("성공으로 기록됐어요!");
             }
             onSuccess();
         } catch (error) {
+            toast.error("기록에 실패했어요.");
             console.error(error);
         }
     };
@@ -42,7 +47,12 @@ export const GoalList = ({
     const handleFail = () => {
         if (recordId && status === "fail") {
             // 이미 실패면 모달 없이 바로 삭제
-            deleteRecord(recordId).then(() => onSuccess());
+            deleteRecord(recordId)
+                .then(() => {
+                    onSuccess();
+                    toast("❌ 실패 체크가 해제됐어요.");
+                })
+                .catch(() => toast.error("오류가 발생했어요."));
             return;
         }
         setIsFailModalOpen(true);
@@ -53,13 +63,16 @@ export const GoalList = ({
             if (recordId) {
                 // 기록 있으면 수정
                 await updateRecord(recordId, { status: "fail", reasonText });
+                toast("실패로 수정됐어요.", { icon: "❌" });
             } else {
                 // 기록 없으면 생성
                 await createRecord({ goalId, status: "fail", reasonText });
+                toast("실패로 기록됐어요.", { icon: "❌" });
             }
             onSuccess();
             setIsFailModalOpen(false);
         } catch (error) {
+            toast.error("기록에 실패했어요.");
             console.error(error);
         }
     };
