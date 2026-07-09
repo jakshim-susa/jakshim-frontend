@@ -12,8 +12,8 @@ import { GoalCreateModal } from "../components/goal/GoalCreateModal";
 import type { RecordListDay, RecordListGoal } from "../types/record";
 import { getAllRecords } from "../api/record";
 import { getFormattedDate, getKoreaToday } from "../utils/date";
-import { getBriefing } from "../api/analysis";
-import { LoadingSpinner } from "../components/common/LoadingSpinner";
+import { getBriefing, getSummary } from "../api/analysis";
+import type { Summary } from "../types/analysis";
 
 export const HomePage = () => {
     const { nickname } = useAuthStore();
@@ -23,7 +23,12 @@ export const HomePage = () => {
     const [recentRecords, setRecentRecords] = useState<RecordListDay[]>([]);
     const [todayRecords, setTodayRecords] = useState<RecordListGoal[]>([]);
     const [briefing, setBriefing] = useState<string>("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [summary, setSummary] = useState<Summary | null>(null);
+
+    const fetchSummary = async () => {
+        const res = await getSummary();
+        setSummary(res);
+    };
 
     const fetchTodayRecords = async () => {
         const today = getKoreaToday();
@@ -50,22 +55,30 @@ export const HomePage = () => {
     };
 
     useEffect(() => {
-        const fetchAll = async () => {
+        // 목표, 기록, 연속성공일 같이 호출
+        const initData = async () => {
             try {
-                setIsLoading(true);
                 await Promise.all([
                     fetchGoals(),
                     fetchRecords(),
-                    fetchBriefing(),
                     fetchTodayRecords(),
+                    fetchSummary(),
                 ]);
             } catch (error) {
                 console.error(error);
-            } finally {
-                setIsLoading(false);
             }
         };
-        fetchAll();
+        initData();
+
+        // AI 브리핑은 Gemini API 호출이라 따로 처리
+        const initBriefing = async () => {
+            try {
+                await fetchBriefing();
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        initBriefing();
     }, []);
 
     const handleGoalSuccess = async () => {
@@ -80,18 +93,18 @@ export const HomePage = () => {
         }
     };
 
-    if (isLoading) return <LoadingSpinner />;
-
     return (
-        <main className="flex flex-col gap-10 flex-1">
+        <main className="flex flex-col gap-10 flex-1 animate-fade-in">
             <div className="flex flex-col gap-2">
                 <Greeting>안녕하세요, {nickname}님👋</Greeting>
                 <p className="text-sm md:text-lg text-text-muted">
                     {getFormattedDate()}
                 </p>
-                <div className="text-xs text-white text-center rounded-2xl bg-success w-[130px]">
-                    🔥12일 연속 성공 중!
-                </div>
+                {summary?.currentStreak ? (
+                    <div className="text-xs text-white text-center rounded-2xl bg-success w-[130px]">
+                        🔥{summary.currentStreak}일 연속 성공 중!
+                    </div>
+                ) : null}
             </div>
             <AiBriefingCard
                 title="AI 브리핑"
@@ -128,6 +141,11 @@ export const HomePage = () => {
                             <GoalList
                                 key={goal.goalId}
                                 goalId={goal.goalId}
+                                recordId={
+                                    todayRecords.find(
+                                        (r) => r.goalId === goal.goalId,
+                                    )?.recordId || null
+                                }
                                 status={
                                     todayRecords.find(
                                         (r) => r.goalId === goal.goalId,

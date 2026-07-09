@@ -35,7 +35,7 @@ export const Input = ({
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
                 disabled={disabled}
-                className={`w-full mb-4 border border-border-primary rounded-md focus:outline-none focus:border-primary disabled:bg-bg-secondary disabled:cursor-not-allowed ${sizeStyle[size]}`}
+                className={`w-full mb-4 border border-border-primary rounded-md focus:outline-none caret-primary focus:border-primary disabled:bg-bg-secondary disabled:cursor-not-allowed text-text-primary bg-bg-white ${sizeStyle[size]}`}
             />
         </div>
     );

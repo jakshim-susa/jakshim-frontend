@@ -6,7 +6,7 @@ import { CenteredPageLayout } from "../components/layout/CenteredPageLayout";
 export const LandingPage = () => {
     return (
         <CenteredPageLayout>
-            <div className="grid grid-cols-2 items-center justify-center mb-5 max-w-[1200px] mx-auto text-text-primary">
+            <main className="grid grid-cols-2 items-center justify-center mb-5 max-w-[1200px] mx-auto text-text-primary animate-fade-in">
                 <div>
                     <div className="font-logo text-4xl mb-2 md:text-6xl md:mb-5">
                         작심삼일 수사대
@@ -32,7 +32,7 @@ export const LandingPage = () => {
                         className="w-xs md:w-lg"
                     />
                 </div>
-            </div>
+            </main>
         </CenteredPageLayout>
     );
 };

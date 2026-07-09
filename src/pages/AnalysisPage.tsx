@@ -8,7 +8,6 @@ import { StatCard } from "../components/record/StatCard";
 import { useAuthStore } from "../store/authStore";
 import { WeeklyChart } from "../components/analysis/WeeklyChart";
 import { ReasonsChart } from "../components/analysis/ReasonsChart";
-import { LoadingSpinner } from "../components/common/LoadingSpinner";
 
 export const AnalysisPage = () => {
     const { nickname } = useAuthStore();
@@ -16,30 +15,33 @@ export const AnalysisPage = () => {
     const [weekly, setWeekly] = useState<Weekly | null>(null);
     const [reasons, setReasons] = useState<Reasons | null>(null);
     const [insight, setInsight] = useState<string>("");
-    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchAll = async () => {
+        const initData = async () => {
             try {
-                setIsLoading(true);
-                const [summaryRes, weeklyRes, reasonsRes, insightRes] =
-                    await Promise.all([
-                        getSummary(),
-                        getWeekly(),
-                        getReasons(),
-                        getInsight(),
-                    ]);
+                const [summaryRes, weeklyRes, reasonsRes] = await Promise.all([
+                    getSummary(),
+                    getWeekly(),
+                    getReasons(),
+                ]);
                 setSummary(summaryRes);
                 setWeekly(weeklyRes);
                 setReasons(reasonsRes);
-                setInsight(insightRes.content);
             } catch (error) {
                 console.error(error);
-            } finally {
-                setIsLoading(false);
             }
         };
-        fetchAll();
+        initData();
+
+        const initInsight = async () => {
+            try {
+                const res = await getInsight();
+                setInsight(res.content);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        initInsight();
     }, []);
 
     const successRate = summary
@@ -50,10 +52,8 @@ export const AnalysisPage = () => {
           )
         : 0;
 
-    if (isLoading) return <LoadingSpinner />;
-
     return (
-        <main className="flex flex-col gap-8 flex-1">
+        <main className="flex flex-col gap-8 flex-1 animate-fade-in">
             <Greeting>안녕하세요, {nickname}님👋</Greeting>
             <AiBriefingCard
                 title="수사 보고서"

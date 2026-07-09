@@ -4,6 +4,7 @@ import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import router from "./router.tsx";
 import { applyTheme, getTheme } from "./utils/theme.ts";
+import { Toaster } from "react-hot-toast";
 
 // 앱 시작할 때 저장된 테마 적용
 applyTheme(getTheme());
@@ -11,5 +12,6 @@ applyTheme(getTheme());
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
         <RouterProvider router={router} />
+        <Toaster position="top-center" />
     </StrictMode>,
 );
