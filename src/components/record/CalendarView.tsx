@@ -5,7 +5,6 @@ import { CalendarLegendItem } from "./CalendarLegendItem";
 import { StatCard } from "./StatCard";
 import { getAllRecords, getRecordsByDate } from "../../api/record";
 import type { RecordListDay, RecordListGoal } from "../../types/record";
-import { LoadingSpinner } from "../common/LoadingSpinner";
 
 export const CalendarView = () => {
     const [value, setValue] = useState(new Date());
@@ -15,7 +14,6 @@ export const CalendarView = () => {
         [],
     );
     const [selectedDiary, setSelectedDiary] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(true); // ← 추가
 
     const handleDateClick = async (date: Date) => {
         setValue(date);
@@ -35,19 +33,14 @@ export const CalendarView = () => {
     useEffect(() => {
         const fetchRecords = async () => {
             try {
-                setIsLoading(true);
                 const res = await getAllRecords();
                 setRecords(res.records);
             } catch (error) {
                 console.error(error);
-            } finally {
-                setIsLoading(false);
             }
         };
         fetchRecords();
     }, []);
-
-    if (isLoading) return <LoadingSpinner />;
 
     // 날짜별 status 계산
     const getDateStatus = (dateStr: string) => {
