@@ -128,6 +128,11 @@ export const HomePage = () => {
                             <GoalList
                                 key={goal.goalId}
                                 goalId={goal.goalId}
+                                recordId={
+                                    todayRecords.find(
+                                        (r) => r.goalId === goal.goalId,
+                                    )?.recordId || null
+                                }
                                 status={
                                     todayRecords.find(
                                         (r) => r.goalId === goal.goalId,
