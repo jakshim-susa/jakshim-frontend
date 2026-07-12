@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import type { GoalCreateRequest } from "../../types/goal";
 import { createGoal } from "../../api/goal";
 import { Button } from "../common/Button";
@@ -38,11 +39,11 @@ export const GoalCreateModal = ({
         }
     };
 
-    return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
-            <div className="bg-bg-white rounded-xl p-6 w-full max-w-md flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
-                <h2 className="text-xl font-bold text-text-primary">
-                    목표 생성
+    return createPortal(
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999] px-4 animate-fade-in">
+            <div className="bg-[#FAF6F0] dark:bg-[#2A2521] rounded-xl p-6 w-full max-w-md flex flex-col gap-4 max-h-[90vh] overflow-y-auto shadow-2xl border border-border-primary/20">
+                <h2 className="text-xl font-bold text-text-primary flex items-center gap-1.5">
+                    🔎 새로운 목표 등록
                 </h2>
 
                 <Input
@@ -51,7 +52,7 @@ export const GoalCreateModal = ({
                     size="lg"
                     value={title}
                     onChange={setTitle}
-                    placeholder="목표를 입력하세요"
+                    placeholder="수사망에 올릴 목표를 입력하세요"
                 />
                 <Input
                     label="시작일"
@@ -68,7 +69,7 @@ export const GoalCreateModal = ({
                     onChange={setEndDate}
                 />
 
-                <div className="flex gap-2 justify-end">
+                <div className="flex gap-2 justify-end mt-2">
                     <Button variant="outline" size="md" onClick={onClose}>
                         취소
                     </Button>
@@ -78,10 +79,11 @@ export const GoalCreateModal = ({
                         onClick={handleSubmit}
                         disabled={!title || loading}
                     >
-                        {loading ? "생성 중..." : "생성"}
+                        {loading ? "등록 중..." : "등록"}
                     </Button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body,
     );
 };
