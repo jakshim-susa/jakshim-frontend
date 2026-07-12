@@ -30,14 +30,15 @@ const features = [
 export const LandingPage = () => {
     return (
         <CenteredPageLayout className="w-full">
-            <div className="flex flex-col justify-center gap-8 md:gap-12 w-full max-w-[1100px] md:max-h-[780px] mx-auto text-text-primary animate-fade-in py-6 md:py-10 px-6 md:px-0">
+            <div className="flex flex-col justify-center gap-8 md:gap-12 w-full max-w-[850px] mx-auto text-text-primary animate-fade-in py-6 md:py-10 px-6 md:px-0">
                 {/* 1. 래이아웃 유지 (좌 텍스트 / 우 마스코트) */}
-                <section className="grid grid-cols-1 md:grid-cols-12 items-center gap-6 md:gap-12">
-                    <div className="md:col-span-7 text-center md:text-left flex flex-col items-center md:items-start order-2 md:order-1">
-                        <h1 className="font-logo text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mb-2">
+                <section className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 w-full">
+                    {/* 텍스트 영역 (md:w-1/2로 변경) */}
+                    <div className="w-full md:w-1/2 text-center md:text-left flex flex-col items-center md:items-start order-2 md:order-1">
+                        <h1 className="font-logo text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mb-3">
                             작심삼일 수사대
                         </h1>
-                        <p className="mb-5 md:mb-6 text-text-muted font-medium text-xs sm:text-sm md:text-base leading-relaxed break-keep max-w-[280px] md:max-w-none">
+                        <p className="mb-6 md:mb-8 text-text-muted font-medium text-xs sm:text-sm md:text-base leading-relaxed break-keep max-w-[280px] md:max-w-none">
                             당신의 습관을 수사하여,{" "}
                             <br className="hidden sm:inline" />
                             반복되는 실패의 원인을 밝혀드립니다.
@@ -51,18 +52,14 @@ export const LandingPage = () => {
                         </div>
                     </div>
 
-                    {/* 💡 오직 수직으로만 콩콩 뛰는 마스코트 영역 */}
-                    <div className="md:col-span-5 flex justify-center order-first md:order-last">
+                    {/* 마스코트 영역 (md:w-1/2 및 max-w 크기 조절) */}
+                    <div className="w-full md:w-1/2 flex justify-center order-first md:order-last">
                         <img
                             src={landingIcon}
                             alt="로고 이미지"
-                            /* - animate-bounce [animation-duration:2.5s]: 
-                                 기울기 없이 오직 위아래로만 2.5초 주기로 콩콩 부드럽게 뜁니다.
-                               - hover:scale-105: 마우스를 올리면 제자리에서 깔끔하게 스케일업!
-                            */
-                            className="w-36 sm:w-44 md:w-full max-w-[280px] object-contain filter drop-shadow-md 
-                                animate-bounce [animation-duration:2.5s] 
-                                hover:scale-105 transition-transform duration-500"
+                            className="w-36 sm:w-44 md:w-full max-w-[240px] md:max-w-[260px] object-contain filter drop-shadow-md 
+                animate-bounce [animation-duration:2.5s] 
+                hover:scale-105 transition-transform duration-500"
                         />
                     </div>
                 </section>
@@ -73,7 +70,7 @@ export const LandingPage = () => {
                         {features.map((feature, index) => (
                             <div
                                 key={index}
-                                className="flex flex-col gap-2.5 p-4 bg-bg-white rounded-xl border border-border-primary
+                                className="flex flex-col gap-2.5 p-4 bg-bg-white rounded-xl border border-border-primary backdrop-blur-md
                                     [box-shadow:var(--shadow-sm)] hover:[box-shadow:var(--shadow-md)] hover:-translate-y-1 transition-all duration-200"
                             >
                                 <div className="w-full h-16 md:h-20 flex items-center justify-center p-1 overflow-hidden">
@@ -83,7 +80,7 @@ export const LandingPage = () => {
                                         className="h-full object-contain"
                                     />
                                 </div>
-                                <div className="flex flex-col gap-0.5 text-left">
+                                <div className="flex flex-col gap-0.5 text-center">
                                     <h2 className="font-bold text-text-primary text-sm md:text-base">
                                         {feature.title}
                                     </h2>
