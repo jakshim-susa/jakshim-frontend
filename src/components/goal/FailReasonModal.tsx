@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "../common/Button";
 import { Input } from "../common/Input";
+import { createPortal } from "react-dom";
 
 interface FailReasonModalProps {
     onClose: () => void;
@@ -13,9 +14,9 @@ export const FailReasonModal = ({
 }: FailReasonModalProps) => {
     const [reasonText, setReasonText] = useState("");
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-bg-white rounded-xl p-6 w-full max-w-md flex flex-col gap-4">
+            <div className="bg-[#FAF6F0] dark:bg-[#2A2521] rounded-xl p-6 w-full max-w-md flex flex-col gap-4">
                 <h2 className="text-xl font-bold text-text-primary">
                     실패 이유
                 </h2>
@@ -41,6 +42,7 @@ export const FailReasonModal = ({
                     </Button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body,
     );
 };

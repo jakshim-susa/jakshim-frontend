@@ -13,7 +13,7 @@ export const RecordList = ({
 }: recordListProps) => {
     return (
         <>
-            <div className="flex flex-wrap justify-between mb-4 items-center">
+            <div className="flex flex-wrap justify-between mb-1 -mt-2 items-center">
                 <div className="flex items-center gap-8">
                     <p className="font-bold text-text-primary">{date}</p>
                     <div className="text-text-primary">{goalTitle}</div>
