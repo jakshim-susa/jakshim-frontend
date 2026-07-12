@@ -48,6 +48,14 @@ api.interceptors.response.use(
             return Promise.reject(error);
         }
 
+        // 로그인/회원가입은 그냥 에러 반환
+        if (
+            originalRequest.url?.includes("/api/auth/login") ||
+            originalRequest.url?.includes("/api/auth/signup")
+        ) {
+            return Promise.reject(error);
+        }
+
         if (error.response?.status === 401 && !originalRequest._retry) {
             if (isRefreshing) {
                 // 이미 refresh 중이면 대기열에 추가

@@ -1,14 +1,51 @@
 import { useState } from "react";
 import { Input } from "../components/common/Input";
 import { Button } from "../components/common/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CenteredPageLayout } from "../components/layout/CenteredPageLayout";
 import { kakaoLogin } from "../utils/kakao";
+import toast from "react-hot-toast";
+import { signup } from "../api/auth";
 
 export const SignupPage = () => {
     const [nickname, setNickname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("");
+
+    const navigate = useNavigate();
+
+    const handleSignup = async () => {
+        if (password !== passwordConfirm) {
+            toast.error("비밀번호가 일치하지 않아요.");
+            return;
+        }
+
+        // 이메일 형식 체크
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            toast.error("이메일 형식이 올바르지 않아요.");
+            return;
+        }
+
+        // 비밀번호 길이 체크
+        if (password.length < 8) {
+            toast.error("비밀번호는 8자 이상 입력해주세요.");
+            return;
+        }
+
+        try {
+            await signup({ email, password, nickname });
+            toast.success("회원가입이 완료되었어요!");
+            navigate("/login");
+        } catch (error) {
+            const err = error as { response?: { data?: { detail?: string } } };
+            const message =
+                err.response?.data?.detail || "회원가입에 실패했어요.";
+            toast.error(message);
+            console.error(error);
+        }
+    };
 
     return (
         <CenteredPageLayout>
@@ -46,15 +83,15 @@ export const SignupPage = () => {
                             placeholder="비밀번호를 입력하세요"
                         />
                         <Input
-                            label="비밀번호"
+                            label="비밀번호 확인"
                             type="password"
                             size="lg"
-                            value={password}
-                            onChange={setPassword}
+                            value={passwordConfirm}
+                            onChange={setPasswordConfirm}
                             placeholder="비밀번호를 입력하세요"
                         />
                     </div>
-                    <Button size="md" variant="primary">
+                    <Button size="md" variant="primary" onClick={handleSignup}>
                         가입하고 시작하기
                     </Button>
 
