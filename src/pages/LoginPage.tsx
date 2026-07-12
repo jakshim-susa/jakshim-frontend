@@ -1,13 +1,36 @@
 import { useState } from "react";
 import { Button } from "../components/common/Button";
 import { Input } from "../components/common/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CenteredPageLayout } from "../components/layout/CenteredPageLayout";
 import { kakaoLogin } from "../utils/kakao";
+import { useAuthStore } from "../store/authStore";
+import { emailLogin } from "../api/auth";
+import { applyTheme, type Theme } from "../utils/theme";
+import toast from "react-hot-toast";
 
 export const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    const { setAuth } = useAuthStore();
+
+    const handleLogin = async () => {
+        try {
+            const res = await emailLogin({ email, password });
+            setAuth(res.accessToken, res.nickname, res.theme);
+            applyTheme(res.theme as Theme);
+            navigate("/home");
+        } catch (error) {
+            console.log("error:", error);
+            const err = error as { response?: { data?: { detail?: string } } };
+            console.log("detail:", err.response?.data?.detail);
+            const message =
+                err.response?.data?.detail || "로그인에 실패했어요.";
+            toast.error(message);
+            console.error(error);
+        }
+    };
 
     return (
         <CenteredPageLayout>
@@ -33,7 +56,7 @@ export const LoginPage = () => {
                         onChange={setPassword}
                         placeholder="비밀번호를 입력하세요"
                     />
-                    <Button size="md" variant="primary">
+                    <Button size="md" variant="primary" onClick={handleLogin}>
                         로그인
                     </Button>
 
