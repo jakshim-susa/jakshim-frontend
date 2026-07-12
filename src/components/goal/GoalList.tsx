@@ -1,4 +1,4 @@
-import { Check, Dumbbell, Trash2, X } from "lucide-react";
+import { Check, Trash2, X } from "lucide-react";
 import type React from "react";
 import { createRecord, deleteRecord, updateRecord } from "../../api/record";
 import { useState } from "react";
@@ -144,9 +144,10 @@ export const GoalList = ({
 
     return (
         <>
-            <div className="flex justify-between mb-4">
-                <div className="flex items-center gap-4">
-                    <Dumbbell className="w-5 h-5 text-text-primary shrink-0" />
+            <li className="flex justify-between items-center mb-1 -mt-2 list-none">
+                <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="w-1.5 h-1.5 rounded-full bg-text-muted/60 shrink-0" />
+
                     {isEditing ? (
                         <input
                             className="text-text-primary border-b border-primary focus:outline-none bg-transparent"
@@ -158,40 +159,40 @@ export const GoalList = ({
                         />
                     ) : (
                         <div
-                            className="text-text-primary cursor-pointer"
+                            className="text-text-primary text-sm md:text-base font-medium cursor-pointer truncate"
                             onDoubleClick={() => setIsEditing(true)}
                         >
                             {children}
                         </div>
                     )}
                     <Trash2
-                        className="w-4 h-4 text-text-muted cursor-pointer hover:text-error shrink-0"
+                        className="w-4 h-4 text-text-muted cursor-pointer hover:text-error shrink-0 transition-colors ml-1"
                         onClick={handleDeleteGoal}
                     />
                 </div>
-                <div className="flex gap-3">
+
+                <div className="flex gap-3 shrink-0">
                     {isUpdating ? (
-                        // 로딩 중일 때 스피너 표시
                         <div className="w-8 h-8 flex items-center justify-center">
                             <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                         </div>
                     ) : (
                         <>
                             <Check
-                                className={`w-8 h-8 p-1 rounded-sm border-1 cursor-pointer
-                    ${status === "success" ? "bg-success text-white" : "text-success bg-white hover:bg-success hover:text-white"}`}
+                                className={`w-8 h-8 p-1 rounded-sm border-1 cursor-pointer transition-colors
+                ${status === "success" ? "bg-success text-white" : "text-success bg-white hover:bg-success hover:text-white"}`}
                                 onClick={handleSuccess}
                             />
                             <X
-                                className={`w-8 h-8 p-1 rounded-sm border-1 cursor-pointer
-                    ${status === "fail" ? "bg-error text-white" : "text-error bg-white hover:bg-error hover:text-white"}`}
+                                className={`w-8 h-8 p-1 rounded-sm border-1 cursor-pointer transition-colors
+                ${status === "fail" ? "bg-error text-white" : "text-error bg-white hover:bg-error hover:text-white"}`}
                                 onClick={handleFail}
                             />
                         </>
                     )}
                 </div>
-            </div>
-            <hr className="text-border-primary mb-4" />
+            </li>
+            <hr className="text-border-primary/50 mb-3" />
 
             {isFailModalOpen && (
                 <FailReasonModal

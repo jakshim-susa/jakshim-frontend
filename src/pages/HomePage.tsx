@@ -95,102 +95,120 @@ export const HomePage = () => {
 
     return (
         <main className="flex flex-col gap-10 flex-1 animate-fade-in">
-            <div className="flex flex-col gap-2">
-                <Greeting>안녕하세요, {nickname}님👋</Greeting>
-                <p className="text-sm md:text-lg text-text-muted">
-                    {getFormattedDate()}
-                </p>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-border-strong/30 w-full">
+                <div className="flex flex-col gap-1">
+                    <Greeting>안녕하세요, {nickname} 탐정님</Greeting>
+                    <p className="text-xs md:text-sm font-medium text-text-muted tracking-wider">
+                        사건 의뢰일: {getFormattedDate()}
+                    </p>
+                </div>
                 {summary?.currentStreak ? (
-                    <div className="text-xs text-white text-center rounded-2xl bg-success w-[130px]">
-                        🔥{summary.currentStreak}일 연속 성공 중!
+                    /* 스트릭 배지도 탐정단 느낌으로 */
+                    <div className="text-xs font-bold text-white text-center py-1.5 px-4 rounded-lg bg-success shadow-sm self-start md:self-auto tracking-wide animate-pulse">
+                        🔥 {summary.currentStreak}일 연속 사건 해결 중
                     </div>
                 ) : null}
             </div>
-            <AiBriefingCard
-                title="AI 브리핑"
-                content={briefing || "브리핑을 불러오는 중..."}
-            />
+            <div className="relative before:absolute before:-top-3 before:left-8 before:w-16 before:h-5 before:bg-yellow-600/15 before:backdrop-blur-[1px] before:rotate-[-3deg] before:z-10">
+                <AiBriefingCard
+                    title="🕵️‍♂️ AI 탐정의 수사 브리핑"
+                    content={
+                        briefing ||
+                        "단서들을 종합하여 브리핑을 작성 중입니다..."
+                    }
+                />
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div className="text-text-primary">
-                    <div className="flex justify-between items-center mb-10">
-                        <p className="font-semibold text-primary-pressed">
-                            오늘의 목표
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+                {/* 좌측: 오늘의 목표 섹션 */}
+                <div className="flex flex-col p-5 bg-bg-white border border-border-primary rounded-xl backdrop-blur-md [box-shadow:var(--shadow-sm)]">
+                    <div className="flex justify-between items-center mb-6">
+                        <p className="font-bold text-sm md:text-base tracking-wide flex items-center gap-1.5 text-primary-pressed">
+                            📌 오늘의 수사 목표
                         </p>
                         <Button
                             variant="outline"
                             size="sm"
                             onClick={() => setIsModalOpen(true)}
                         >
-                            + 목표 생성
+                            + 목표 추가
                         </Button>
+                    </div>
 
-                        {isModalOpen && (
-                            <GoalCreateModal
-                                onClose={() => setIsModalOpen(false)}
-                                onSuccess={handleGoalSuccess}
-                            />
+                    <div className="flex flex-col gap-3">
+                        {goals.length === 0 ? (
+                            <p className="text-text-muted text-xs md:text-sm py-4 text-center">
+                                아직 배정된 목표가 없습니다. 새로운 목표를
+                                수사망에 올려보세요!
+                            </p>
+                        ) : (
+                            goals.map((goal) => (
+                                <GoalList
+                                    key={goal.goalId}
+                                    goalId={goal.goalId}
+                                    recordId={
+                                        todayRecords.find(
+                                            (r) => r.goalId === goal.goalId,
+                                        )?.recordId || null
+                                    }
+                                    status={
+                                        todayRecords.find(
+                                            (r) => r.goalId === goal.goalId,
+                                        )?.status || null
+                                    }
+                                    onSuccess={handleGoalSuccess}
+                                >
+                                    {goal.title}
+                                </GoalList>
+                            ))
                         )}
                     </div>
-                    {goals.length === 0 ? (
-                        <p className="text-text-muted text-sm">
-                            아직 목표가 없어요. 목표를 추가해보세요!
-                        </p>
-                    ) : (
-                        goals.map((goal) => (
-                            <GoalList
-                                key={goal.goalId}
-                                goalId={goal.goalId}
-                                recordId={
-                                    todayRecords.find(
-                                        (r) => r.goalId === goal.goalId,
-                                    )?.recordId || null
-                                }
-                                status={
-                                    todayRecords.find(
-                                        (r) => r.goalId === goal.goalId,
-                                    )?.status || null
-                                }
-                                onSuccess={handleGoalSuccess}
-                            >
-                                {goal.title}
-                            </GoalList>
-                        ))
-                    )}
                 </div>
-                <div className="text-text-primary">
-                    <div className="flex justify-between items-center mb-10">
-                        <p className="font-semibold text-primary-pressed">
-                            최근 기록
+
+                {isModalOpen && (
+                    <GoalCreateModal
+                        onClose={() => setIsModalOpen(false)}
+                        onSuccess={handleGoalSuccess}
+                    />
+                )}
+
+                {/* 최근 기록 섹션 */}
+                <div className="flex flex-col p-5 bg-bg-white border border-border-primary rounded-xl backdrop-blur-md [box-shadow:var(--shadow-sm)]">
+                    <div className="flex justify-between items-center mb-6">
+                        <p className="font-bold text-sm md:text-base tracking-wide flex items-center gap-1.5 text-primary-pressed">
+                            📜 최근 발견된 단서
                         </p>
                         <p
-                            className="cursor-pointer text-primary-pressed active:underline a"
+                            className="cursor-pointer text-xs font-semibold text-text-muted hover:text-primary-pressed transition-colors active:underline"
                             onClick={() =>
                                 navigate("/record", { state: { view: "list" } })
                             }
                         >
-                            전체 보기
+                            전체 사건 기록 ➔
                         </p>
                     </div>
-                    {recentRecords.length === 0 ? (
-                        <p className="text-text-muted text-sm">
-                            최근 기록이 없어요.
-                        </p>
-                    ) : (
-                        recentRecords.map((day) =>
-                            day.goals
-                                .filter((goal) => goal.status !== null)
-                                .map((goal) => (
-                                    <RecordList
-                                        key={goal.goalId}
-                                        date={day.date}
-                                        goalTitle={goal.goal}
-                                        status={goal.status}
-                                        reasonCategory={goal.reasonCategory}
-                                    />
-                                )),
-                        )
-                    )}
+
+                    <div className="flex flex-col gap-3">
+                        {recentRecords.length === 0 ? (
+                            <p className="text-text-muted text-xs md:text-sm py-4 text-center">
+                                아직 획득한 단서(기록)가 없습니다.
+                            </p>
+                        ) : (
+                            recentRecords.map((day) =>
+                                day.goals
+                                    .filter((goal) => goal.status !== null)
+                                    .map((goal) => (
+                                        <RecordList
+                                            key={goal.goalId}
+                                            date={day.date}
+                                            goalTitle={goal.goal}
+                                            status={goal.status}
+                                            reasonCategory={goal.reasonCategory}
+                                        />
+                                    )),
+                            )
+                        )}
+                    </div>
                 </div>
             </div>
         </main>

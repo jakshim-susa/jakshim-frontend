@@ -34,7 +34,7 @@
     /* 배경 */
     --color-bg-primary: #faf9f7;
     --color-bg-secondary: #f5efe8;
-    --color-bg-white: #ffffff;
+    --color-bg-white: rgba(251, 249, 245, 0.65);
 
     /* 텍스트 컬러 */
     --color-text-primary: #2b2b2b;
@@ -84,6 +84,16 @@
     body {
         font-family: var(--font-sans);
         background-color: var(--color-bg-primary);
+
+        background-image: url("/src/assets/images/detective-bg.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    :where(.dark, .dark *) body {
+        background-image: url("/src/assets/images/detective-bg-dark.png");
     }
 }
 
@@ -101,7 +111,7 @@
 
     --color-bg-primary: #1f1b18;
     --color-bg-secondary: #2a2521;
-    --color-bg-white: #2a2521;
+    --color-bg-white: rgba(42, 37, 33, 0.75);
 
     --color-text-primary: #f5f1eb;
     --color-text-secondary: #cfc6bc;
@@ -112,7 +122,6 @@
     --color-border-strong: #6b6158;
     --color-border-divider: #5a5148;
 
-    /* 다크모드 그림자 */
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
