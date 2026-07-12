@@ -18,10 +18,12 @@ export const Button = ({
     fullWidth = false,
 }: ButtonProps) => {
     const variantStyle = {
-        primary: "bg-primary text-white hover:bg-primary-hover",
-        secondary: "bg-secondary text-text-primary hover:bg-secondary-hover",
-        danger: "bg-danger text-white hover:bg-danger-hover",
-        kakao: "bg-[#FEE500] text-text-primary hover:bg-[#FDD800]",
+        primary:
+            "bg-primary text-white hover:bg-primary-hover shadow-sm hover:shadow-md",
+        secondary:
+            "bg-secondary text-text-primary hover:bg-secondary-hover shadow-sm hover:shadow-md",
+        danger: "bg-danger text-white hover:bg-danger-hover shadow-sm hover:shadow-md",
+        kakao: "bg-[#FEE500] text-[#3B1F1F] hover:bg-[#FDD800] shadow-sm hover:shadow-md",
         outline:
             "bg-transparent text-primary border border-primary hover:bg-primary hover:text-white",
     };
@@ -36,7 +38,12 @@ export const Button = ({
         <button
             onClick={onClick}
             disabled={disabled}
-            className={`cursor-pointer font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${fullWidth ? "w-full" : ""} ${variantStyle[variant]} ${sizeStyle[size]}`}
+            className={`cursor-pointer font-medium transition-all duration-200
+        active:scale-95
+        disabled:opacity-50 disabled:cursor-not-allowed
+        ${fullWidth ? "w-full" : ""}
+        ${variantStyle[variant]}
+        ${sizeStyle[size]}`}
         >
             {children}
         </button>

@@ -14,20 +14,31 @@ export const AnalysisToggle = ({
     onChange,
 }: ToggleProps) => {
     return (
-        <div className="flex items-center justify-center gap-4 bg-bg-secondary py-1 px-1 rounded-md border-1 border-border-primary">
+        <div className="relative flex items-center bg-bg-secondary py-1 px-1 rounded-lg border-1 border-border-primary [box-shadow:var(--shadow-sm)]">
+            {/* 슬라이딩 배경 */}
             <div
-                className={`flex items-center justify-center gap-2 py-0.5 px-2.5 rounded-md cursor-pointer ${selected === "left" ? "bg-bg-white border-1 border-border-primary" : ""}`}
+                className={`absolute top-1 bottom-1 rounded-md bg-bg-white border-1 border-border-primary [box-shadow:var(--shadow-sm)] transition-all duration-300
+                    ${selected === "left" ? "left-1 right-1/2" : "left-1/2 right-1"}`}
+            />
+
+            {/* 왼쪽 */}
+            <div
+                className={`relative flex items-center justify-center gap-2 py-1 px-3 rounded-md cursor-pointer transition-all duration-300 z-10
+                    ${selected === "left" ? "text-primary" : "text-text-muted"}`}
                 onClick={() => onChange("left")}
             >
-                <Calendar className="w-4 h-4 text-text-primary" />
-                <p className="text-md text-text-secondary">{leftLabel}</p>
+                <Calendar className="w-4 h-4" />
+                <p className="text-sm font-medium">{leftLabel}</p>
             </div>
+
+            {/* 오른쪽 */}
             <div
-                className={`flex items-center justify-center gap-2 py-0.5 px-2.5 rounded-md cursor-pointer ${selected === "right" ? "bg-bg-white border-1 border-border-primary" : ""}`}
+                className={`relative flex items-center justify-center gap-2 py-1 px-3 rounded-md cursor-pointer transition-all duration-300 z-10
+                    ${selected === "right" ? "text-primary" : "text-text-muted"}`}
                 onClick={() => onChange("right")}
             >
-                <List className="w-4 h-4 text-text-primary" />
-                <p className="text-md text-text-secondary">{rightLabel}</p>
+                <List className="w-4 h-4" />
+                <p className="text-sm font-medium">{rightLabel}</p>
             </div>
         </div>
     );

@@ -68,6 +68,10 @@
     --color-info: #5a8dee;
     --color-info-hover: #4b7fdf;
     --color-info-pressed: #3c70cf;
+
+    /* 그림자 */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 @layer base {
@@ -107,6 +111,10 @@
     --color-border-primary: #4b433c;
     --color-border-strong: #6b6158;
     --color-border-divider: #5a5148;
+
+    /* 다크모드 그림자 */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 main {
